@@ -28,8 +28,8 @@ export function TransactionPage() {
                     <div className="bg-base-200 mb-4 p-4 rounded-lg flex gap-2">
                         <Form className="flex justify-center items-center h-full w-auto gap-2" method="get" action="/transactions">
                             <label className="hidden" htmlFor="search">Recherche</label>
-                            <input type="text" className="input input-bordered input-xs w-full max-w-xs" name="search-input" id="search" placeholder="Recherche une transaction" />
-                            <input type="submit" className="btn btn-accent btn-xs" value={'Rechercher'} />
+                            <input type="text" className="input input-bordered input-xs sm:input-sm w-full max-w-xs" name="search-input" id="search" placeholder="Recherche une transaction" />
+                            <input type="submit" className="btn btn-accent sm:input-sm btn-xs" value={'Rechercher'} />
                         </Form>
                         <label className="hidden" htmlFor="font-filter">Select a font:</label>
                         <select name="filter" id="font-filter" defaultValue="Pick a font" className=" w-24 select select-ghost">
