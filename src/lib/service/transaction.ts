@@ -29,6 +29,6 @@ export class TransactionService {
     }
 
     static filterByCategory(category: string, data: Transaction[]): Promise<Transaction[]> {
-        return Promise.resolve(data.filter(transaction => transaction.category === category));
+        return Promise.resolve(data.filter(transaction => transaction.category.includes(category)));
     }
 }
