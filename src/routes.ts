@@ -1,8 +1,14 @@
 import { createBrowserRouter } from "react-router"
 import ConnexionPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import HomePage from "./pages/HomePage"
+import NotFoundPage from "./pages/404"
 
 export const router = createBrowserRouter([
+    {
+        path: '/',
+        Component: HomePage,
+    },
    {
     path: 'auth',
 
@@ -16,5 +22,9 @@ export const router = createBrowserRouter([
             Component: RegisterPage,
         }
     ]
+   },
+   {
+    path: '/*',
+    Component: NotFoundPage,
    }
 ])
