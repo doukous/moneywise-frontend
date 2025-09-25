@@ -1,5 +1,6 @@
 import { Form } from "react-router";
 import "../index.css"
+import { TransactionList } from "../components/transactionList";
 
 const user = {
     name: "John Doe",
@@ -42,7 +43,7 @@ export function TransactionPage() {
             </div>
             {/* transaction list */}
             <div className="w-full h-full px-4 overflow-y-auto">
-                
+                <TransactionList />
             </div>
         </div>
     )
