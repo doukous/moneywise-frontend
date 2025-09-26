@@ -40,6 +40,7 @@ export default function ConnexionPage() {
         <button type="button" className="w-76 btn btn-primary">
           Continuer avec Google
         </button>
+        <Link to="/auth/reset-password" className="text-cyan-700">Mot de passe oublié ?</Link>
         <span>
           Vous n'avez pas de compte ?{" "}
           <Link to="/auth/register" className="text-cyan-700">

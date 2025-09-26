@@ -3,6 +3,7 @@ import ConnexionPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import HomePage from "./pages/HomePage"
 import NotFoundPage from "./pages/404"
+import ForgottenPasswordPage from "./pages/PasswordResetPage"
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
         {
             path: 'register',
             Component: RegisterPage,
+        },
+        {
+            path: 'reset-password',
+            Component: ForgottenPasswordPage,
         }
     ]
    },
