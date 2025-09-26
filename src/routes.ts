@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router"
 import ConnexionPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import HomePage from "./pages/HomePage"
+import { TransactionPage } from "./pages/transactionPage"
 import NotFoundPage from "./pages/404"
 
 export const router = createBrowserRouter([
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
             Component: RegisterPage,
         }
     ]
+   },
+   {
+    path: '/transactions',
+    Component: TransactionPage,
    },
    {
     path: '/*',
