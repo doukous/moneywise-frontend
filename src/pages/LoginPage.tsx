@@ -12,11 +12,25 @@ export default function ConnexionPage() {
           <h1 className="text-3xl font-extrabold">Page de connexion</h1>
           <div className="flex flex-col">
             <label htmlFor="mail-adress">Adresse mail</label>
-            <input type="email" id="mail-adress" className="w-76 input" />
+            <input
+              type="email"
+              id="mail-adress"
+              className="w-76 input"
+              required
+              placeholder="user@example.com"
+              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+              title="Le mail doit etre de la forme user@example.com>"
+            />
           </div>
           <div className="flex flex-col">
             <label htmlFor="password">Mot de passe</label>
-            <input type="password" id="password" className="w-76 input" />
+            <input
+              type="password"
+              id="password"
+              className="w-76 input"
+              required
+              minLength={8}
+            />
           </div>
           <button type="submit" className="w-full btn btn-accent">
             Se connecter
