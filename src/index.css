@@ -1,7 +1,4 @@
 @import "tailwindcss";
-<<<<<<< HEAD
-@plugin "daisyui";
-=======
 @plugin "daisyui";
 
 @layer utilities {
@@ -85,4 +82,3 @@
   --depth: 1;
   --noise: 1;
 }
->>>>>>> main
