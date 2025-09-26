@@ -1,21 +1,51 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/logout"; 
-//  En production, change par ton domaine déployé
+import axios from "axios";
 
-export async function logoutUser() {
-  const token = localStorage.getItem("token"); // récupère le JWT
+const API_URL = "http://127.0.0.1:8000/api";
 
-  const response = await fetch(`${API_URL}/logout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` // on envoie le JWT au back
-    }
+// Helper pour récupérer le token
+function getAuthHeaders() {
+  const token = localStorage.getItem("token");
+  return { Authorization: `Bearer ${token}` };
+}
+
+// Connexion
+export async function login(email, password) {
+  const res = await axios.post(`${API_URL}/login`, { email, password });
+  localStorage.setItem("token", res.data.access_token);
+  return res.data;
+}
+
+// Déconnexion
+export async function logout() {
+  const res = await axios.post(
+    `${API_URL}/logout`,
+    {},
+    { headers: getAuthHeaders() }
+  );
+  localStorage.removeItem("token");
+  return res.data;
+}
+
+// Profil utilisateur
+export async function getUserProfile() {
+  const res = await axios.get(`${API_URL}/me`, {
+    headers: getAuthHeaders(),
   });
+  return res.data;
+}
 
-  if (response.ok) {
-    localStorage.removeItem("token"); // on supprime le JWT
-    return true;
-  } else {
-    throw new Error("Échec de la déconnexion");
-  }
+// Mise à jour du profil utilisateur ( backend doit avoir une route PUT /me)
+export async function updateUserProfile(formData) {
+  const res = await axios.put(`${API_URL}/me`, formData, {
+    headers: getAuthHeaders(),
+  });
+  return res.data;
+}
+
+// Statistiques globales
+export async function getUserStats() {
+  const res = await axios.get(`${API_URL}/stats/monthly`, {
+    headers: getAuthHeaders(),
+  });
+  return res.data; 
 }
