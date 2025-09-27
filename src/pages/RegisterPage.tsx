@@ -17,15 +17,12 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full h-screen flex justify-center">
-      <div className="w-76 flex flex-col items-center justify-center gap-y-8">
-        <Form
-          method="post"
-          className="flex flex-col items-center gap-y-8"
-        >
+      <div className="w-76 flex flex-col items-center justify-center gap-y-6">
+        <h1 className="text-3xl font-extrabold">Page d'inscription</h1>
+        <Form method="post" className="flex flex-col items-center gap-y-8">
           {actionData && (
             <span>Data retourné : fullname : {actionData.data}</span>
           )}
-          <h1 className="text-3xl font-extrabold">Page d'inscription</h1>
           <div className="flex flex-col">
             <label htmlFor="fullname">Nom complet</label>
             <input
