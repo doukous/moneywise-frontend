@@ -5,31 +5,36 @@ import HomePage from "./pages/HomePage"
 import { TransactionPage } from "./pages/transactionPage"
 import NotFoundPage from "./pages/404"
 
-export const router = createBrowserRouter([
-    {
-        path: '/',
-        Component: HomePage,
-    },
-   {
-    path: 'auth',
+import Profile from "./pages/profile";
 
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: HomePage,
+  },
+  {
+    path: "auth",
     children: [
-        {
-            path: 'login',
-            Component: ConnexionPage,
-        },
-        {
-            path: 'register',
-            Component: RegisterPage,
-        }
-    ]
-   },
-   {
-    path: '/transactions',
+      {
+        path: "login",
+        Component: ConnexionPage,
+      },
+      {
+        path: "register",
+        Component: RegisterPage,
+      },
+    ],
+  },
+  {
+    path: "/transactions",
     Component: TransactionPage,
-   },
-   {
-    path: '/*',
+  },
+  {
+    path: "/profile",  
+    Component: Profile,
+  },
+  {
+    path: "/*",
     Component: NotFoundPage,
-   }
-])
+  },
+]);

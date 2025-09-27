@@ -1,9 +1,8 @@
-// src/components/LogoutButton.jsx
 import React from "react";
 import { logout } from "../services/auth";
 
-const LogoutButton = () => {
-  const handleLogout = async () => {
+const LogoutButton: React.FC = () => {
+  const handleLogout = async (): Promise<void> => {
     try {
       await logout();
       window.location.href = "/login"; // Redirection vers login
