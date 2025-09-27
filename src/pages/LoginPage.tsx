@@ -5,7 +5,6 @@ export default function ConnexionPage() {
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-12">
         <Form
-          action="/api/auth/login"
           method="post"
           className="flex flex-col items-center gap-y-8"
         >
@@ -14,6 +13,7 @@ export default function ConnexionPage() {
             <label htmlFor="mail-adress">Adresse mail</label>
             <input
               type="email"
+              name="mail-address"
               id="mail-adress"
               className="w-76 input"
               required
@@ -26,6 +26,7 @@ export default function ConnexionPage() {
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
+              name="password"
               id="password"
               className="w-76 input"
               required

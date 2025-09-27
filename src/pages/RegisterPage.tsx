@@ -1,18 +1,17 @@
 import { useRef, useState } from "react";
-import { Form, Link } from "react-router";
+import { Form, Link, useActionData } from "react-router";
 
 export default function RegisterPage() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const confirmationPasswordRef = useRef<HTMLInputElement | null>(null);
   const [samePasswords, setSamePasswords] = useState(true);
+  const actionData = useActionData();
 
   function checkPasswordsConformity() {
     if (passwordRef.current?.value !== confirmationPasswordRef.current?.value) {
       setSamePasswords(false);
-    }
-
-    else {
-        setSamePasswords(true)
+    } else {
+      setSamePasswords(true);
     }
   }
 
@@ -20,15 +19,30 @@ export default function RegisterPage() {
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-8">
         <Form
-          action="/api/auth/login"
           method="post"
           className="flex flex-col items-center gap-y-8"
         >
+          {actionData && (
+            <span>Data retourné : fullname : {actionData.data}</span>
+          )}
           <h1 className="text-3xl font-extrabold">Page d'inscription</h1>
+          <div className="flex flex-col">
+            <label htmlFor="fullname">Nom complet</label>
+            <input
+              type="text"
+              name="fullname"
+              id="fullname"
+              className="w-76 input"
+              placeholder="Jane Doe"
+              required
+            />
+          </div>
+
           <div className="flex flex-col">
             <label htmlFor="mail-adress">Adresse mail</label>
             <input
               type="email"
+              name="mail-address"
               id="mail-adress"
               className="w-76 input"
               placeholder="user@example.com"
@@ -41,6 +55,7 @@ export default function RegisterPage() {
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
+              name="password"
               id="password"
               className="w-76 input"
               required
