@@ -189,6 +189,7 @@ export function TransactionForm({
               <input
                 id="date"
                 type="text"
+                value={trans.date}
                 className="input input-bordered w-full"
                 placeholder="exemple : 13/02/2022 22:45"
               />
@@ -197,7 +198,7 @@ export function TransactionForm({
 
           {/* Actions */}
           <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-info">
               Sauvegarder
             </button>
             <button

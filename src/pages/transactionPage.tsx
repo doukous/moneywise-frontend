@@ -77,6 +77,10 @@ export function TransactionPage() {
   const [transactions, setTransactionList] = useState<Transaction[]>(trans);
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
+    if (query === "") {
+      setTransactionList(trans);
+      return;
+    }
     if (row === "Nom" && query !== "") {
       setTransactionList(
         transactions.filter((t) => t.name.toLowerCase().includes(query)),
@@ -91,9 +95,7 @@ export function TransactionPage() {
     }
   };
   const [row, setRow] = useState("Nom");
-  const resetTransactions = () => {
-    setTransactionList(trans);
-  };
+
   return (
     <div className="w-full h-screen bg-base-100 flex flex-col items-center justify-start gap-y-4">
       {/* headder*/}
@@ -141,12 +143,6 @@ export function TransactionPage() {
                 <option>Nom</option>
                 <option>Categories</option>
               </select>
-              <button
-                onClick={resetTransactions}
-                className="btn btn-soft btn-warning"
-              >
-                reset
-              </button>
             </Form>
           </div>
         </div>
