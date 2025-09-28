@@ -25,13 +25,13 @@
 //}
 //
 export interface Transaction {
-    id: string
-    name: string
-    amount: number
-    category: string[]
-    description?: string
-    type: 'income' | 'expense'
-    date: string // exemple: "2023-05-25 14:20"
+  id: string;
+  name: string;
+  amount: number;
+  category: number | null;
+  description?: string;
+  type: string; // 'income' | 'expense'
+  date: string; // exemple: "2023-05-25 14:20"
 }
 //
 //export interface Category {
