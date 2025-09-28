@@ -6,6 +6,7 @@ import { TransactionPage } from "./pages/transactionPage"
 import NotFoundPage from "./pages/404"
 
 import Profile from "./pages/profile";
+import Reports from "./pages/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,12 @@ export const router = createBrowserRouter([
     path: "/profile",  
     Component: Profile,
   },
+
+{
+  path: "/reports",
+  Component: Reports,
+},
+
   {
     path: "/*",
     Component: NotFoundPage,

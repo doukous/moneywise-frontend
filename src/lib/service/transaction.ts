@@ -1,4 +1,4 @@
-import type { Transaction } from "./dto.js";
+import type { Transaction } from "./dto";
 import { BackService } from "../backendFetch.js";
 
 export class TransactionService {

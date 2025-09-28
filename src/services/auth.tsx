@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://moneywise-api-backend.onrender.com/api";
 
 // -------------------
 // Types
@@ -65,7 +65,7 @@ export async function getUserProfile(): Promise<User> {
 
 // Mise à jour du profil utilisateur
 export async function updateUserProfile(formData: Partial<User>): Promise<User> {
-  const res: AxiosResponse<User> = await axios.put(`${API_URL}/me`, formData, {
+  const res: AxiosResponse<User> = await axios.put(`${API_URL}/update-profile`, formData, {
     headers: getAuthHeaders(),
   });
   return res.data;
