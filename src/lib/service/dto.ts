@@ -1,29 +1,31 @@
-//export interface User {
-//    id: string
-//    fullname: string
-//    username: string
-//    email: string
-//    createdAt: string
-//    updatedAt: string
-//}
-//
-//export interface RegisterRequest {
-//    fullname: string
-//    username: string
-//    email: string
-//    password: string
-//}
-//
-//export interface LoginRequest {
-//    email: string
-//    password: string
-//}
-//
-//export interface AuthResponse {
-//    token: string
-//    user: User
-//}
-//
+export interface User {
+   id: string
+   name: string
+   email: string
+   budget: number
+   profile_image: URL
+   createdAt: string
+   updatedAt: string
+}
+
+export interface RegisterRequest {
+   name: string
+   email: string
+   password: string
+}
+
+export interface LoginRequest {
+   email: string
+   password: string
+}
+
+export interface LoginResponse {
+    access_token: string
+    user: User
+    token_type: string
+    expires_in: number
+}
+
 export interface Transaction {
     id: string
     name: string

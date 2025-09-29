@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import { TransactionPage } from "./pages/transactionPage";
 import NotFoundPage from "./pages/404";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+import StatisticsPage from "./pages/StatisticsPage";
 import { BackService } from "./lib/backendFetch";
 import type {
   RegisterRequest,
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
         path: "",
         loader: dashboardDataLoader,
         Component: HomePage,
+      },
+      {
+        path: "statistiques",
+        Component: StatisticsPage,
       },
       {
         path: "transactions",
