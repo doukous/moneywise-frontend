@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
           profileImage: "",
           created_at: "2025-01-01T10:00:00",
           updated_at: "2025-01-01T10:00:00",
-          name: ""
+          name: "",
         };
         setUser(mockUser);
         setFormData({
@@ -112,7 +112,9 @@ const Profile: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-          <p className="text-gray-600 mt-1">Gérez vos informations personnelles</p>
+          <p className="text-gray-600 mt-1">
+            Gérez vos informations personnelles
+          </p>
         </div>
         <div className="flex items-center gap-3">
           {user.profileImage ? (
@@ -135,7 +137,9 @@ const Profile: React.FC = () => {
       {/* Informations personnelles */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Informations personnelles</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Informations personnelles
+          </h2>
           {!isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
@@ -179,7 +183,11 @@ const Profile: React.FC = () => {
             <label className="flex items-center gap-2 cursor-pointer text-blue-600 hover:underline">
               <Upload className="h-4 w-4" />
               Changer la photo
-              <input type="file" className="hidden" onChange={handleFileChange} />
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
             </label>
           )}
         </div>
@@ -197,12 +205,17 @@ const Profile: React.FC = () => {
                   type="text"
                   value={formData.firstName}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      firstName: e.target.value,
+                    }))
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               ) : (
-                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.firstName}</div>
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                  {user.firstName}
+                </div>
               )}
             </div>
 
@@ -216,12 +229,17 @@ const Profile: React.FC = () => {
                   type="text"
                   value={formData.lastName}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      lastName: e.target.value,
+                    }))
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               ) : (
-                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.lastName}</div>
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                  {user.lastName}
+                </div>
               )}
             </div>
 
@@ -235,7 +253,10 @@ const Profile: React.FC = () => {
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, dateOfBirth: e.target.value }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      dateOfBirth: e.target.value,
+                    }))
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
@@ -256,12 +277,17 @@ const Profile: React.FC = () => {
                   type="text"
                   value={formData.mobileNumber}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, mobileNumber: e.target.value }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      mobileNumber: e.target.value,
+                    }))
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               ) : (
-                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.mobileNumber}</div>
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                  {user.mobileNumber}
+                </div>
               )}
             </div>
 
@@ -280,7 +306,9 @@ const Profile: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               ) : (
-                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.email}</div>
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                  {user.email}
+                </div>
               )}
             </div>
 
@@ -295,7 +323,10 @@ const Profile: React.FC = () => {
                     type="password"
                     value={formData.password}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, password: e.target.value }))
+                      setFormData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
                     }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
