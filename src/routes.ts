@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage"
 import { TransactionPage } from "./pages/transactionPage"
 import NotFoundPage from "./pages/404"
 
-import Profile from "./pages/profile";
+import Profile from "./pages/profil";
 import Reports from "./pages/Reports";
 
 export const router = createBrowserRouter([
@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
     Component: TransactionPage,
   },
   {
-    path: "/profile",  
+    path: "/profil",  
     Component: Profile,
   },
 
