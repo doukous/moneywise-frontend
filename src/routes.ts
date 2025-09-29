@@ -11,6 +11,7 @@ import type {
   RegisterRequest,
   LoginRequest,
   LoginResponse,
+  TransactionList,
 } from "./lib/service/dto";
 
 function authMiddleware() {
@@ -28,10 +29,15 @@ function authMiddleware() {
 
 async function dashboardDataLoader() {
   const token = localStorage.getItem("auth_token");
-  const data = await BackService.get("/api/me", {
+  const user = await BackService.get("/api/me", {
     headers: { authorization: `Bearer ${token}` },
   });
-  return { data: data };
+
+  const transactions: TransactionList = await BackService.get("/api/transactions", {
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  return { user: user, transactions: transactions };
 }
 
 export const router = createBrowserRouter([
