@@ -35,6 +35,12 @@ export interface Transaction {
     type: 'income' | 'expense'
     date: string // exemple: "2023-05-25 14:20"
 }
+
+export interface TransactionList {
+   success: boolean,
+   count: number,
+   transactions: Transaction[]
+}
 //
 //export interface Category {
 //    id: string
