@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter, redirect } from "react-router"
 import ConnexionPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import HomePage from "./pages/HomePage"
@@ -6,14 +6,14 @@ import { TransactionPage } from "./pages/transactionPage"
 import NotFoundPage from "./pages/404"
 
 import Profile from "./pages/profile";
-import { createBrowserRouter, redirect } from "react-router";
+
 import { BackService } from "./lib/backendFetch";
-import { TransactionPage } from "./pages/transactionPage";
-import ConnexionPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/404";
-import Profile from "./pages/profile";
+
+
+
+
+
+
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
@@ -153,7 +153,6 @@ export const router = createBrowserRouter([
 
   {
     path: "/*",
-    path: "*",
     Component: NotFoundPage,
   },
 ]);
