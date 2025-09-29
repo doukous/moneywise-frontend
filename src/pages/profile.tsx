@@ -1,67 +1,59 @@
 import React, { useState, useEffect, type FormEvent } from "react";
-import { Edit, Save, X } from "lucide-react";
-import {
-  getUserProfile,
-  updateUserProfile,
-  getUserStats,
-  type User,
-  type Stats,
-} from "../services/auth";
-import LogoutButton from "../components/LogoutButton"; // ✅ Import du bouton
+import { Edit, Save, X, Upload } from "lucide-react";
+import { getUserProfile, updateUserProfile, type User } from "../services/auth";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [stats, setStats] = useState<Stats>({
-    transactions: 0,
-    categories: 0,
-    total: 0,
-  });
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<{ name: string; email: string }>({
-    name: "",
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
+    mobileNumber: "",
+    dateOfBirth: "",
+    password: "",
+    profileImage: "", // chemin de l'image
   });
 
-  // Charger profil + stats (avec fallback mock)
   useEffect(() => {
     getUserProfile()
       .then((data) => {
         setUser(data);
-        setFormData({ name: data.name || "", email: data.email || "" });
+        setFormData({
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          email: data.email || "",
+          mobileNumber: data.mobileNumber || "",
+          dateOfBirth: data.dateOfBirth || "",
+          password: "",
+          profileImage: data.profileImage || "",
+        });
       })
-      .catch((err) => {
-        console.error("Erreur profil :", err);
-
+      .catch(() => {
         // 🔹 Mock user si l’API échoue
         const mockUser: User = {
           id: 1,
-          name: "Cheikhouna DIOP",
+          firstName: "Cheikhouna",
+          lastName: "DIOP",
           email: "Diop.cheikhunaa@example.com",
+          mobileNumber: "+221 77 000 00 00",
+          dateOfBirth: "2000-01-01",
+          profileImage: "",
           created_at: "2025-01-01T10:00:00",
           updated_at: "2025-01-01T10:00:00",
+          name: ""
         };
         setUser(mockUser);
-        setFormData({ name: mockUser.name, email: mockUser.email });
-      });
-
-    getUserStats()
-      .then((data) => {
-        setStats({
-          transactions: data.transactions || 0,
-          categories: data.categories || 0,
-          total: data.total || 0,
+        setFormData({
+          firstName: mockUser.firstName,
+          lastName: mockUser.lastName,
+          email: mockUser.email,
+          mobileNumber: mockUser.mobileNumber,
+          dateOfBirth: mockUser.dateOfBirth,
+          password: "",
+          profileImage: mockUser.profileImage,
         });
-      })
-      .catch((err) => {
-        console.error("Erreur stats :", err);
-
-        // 🔹 Mock stats si l’API échoue
-        const mockStats: Stats = {
-          transactions: 12,
-          categories: 5,
-          total: 3500,
-        };
-        setStats(mockStats);
       });
   }, []);
 
@@ -77,8 +69,32 @@ const Profile: React.FC = () => {
   };
 
   const handleCancel = () => {
-    setFormData({ name: user?.name || "", email: user?.email || "" });
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        mobileNumber: user.mobileNumber || "",
+        dateOfBirth: user.dateOfBirth || "",
+        password: "",
+        profileImage: user.profileImage || "",
+      });
+    }
     setIsEditing(false);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          profileImage: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   if (!user) {
@@ -92,23 +108,34 @@ const Profile: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
+      {/* Header avec photo + nom utilisateur */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Profil</h1>
-          <p className="text-gray-600 mt-1">
-            Gérez vos informations personnelles
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
+          <p className="text-gray-600 mt-1">Gérez vos informations personnelles</p>
         </div>
-        {/* ✅ Bouton Déconnexion en haut à droite */}
-        <LogoutButton />
+        <div className="flex items-center gap-3">
+          {user.profileImage ? (
+            <img
+              src={user.profileImage}
+              alt="Profil"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+              {user.firstName?.[0]}
+            </div>
+          )}
+          <span className="font-medium text-gray-800">
+            {user.firstName} {user.lastName}
+          </span>
+        </div>
       </div>
 
       {/* Informations personnelles */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Informations personnelles
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-900">Informations personnelles</h2>
           {!isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
@@ -134,86 +161,158 @@ const Profile: React.FC = () => {
           )}
         </div>
 
+        {/* Photo de profil */}
         <div className="flex items-center space-x-6 mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-2xl font-bold">
-              {user?.name?.[0]}
-            </span>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900">{user?.name}</h3>
-            <p className="text-gray-600">{user?.email}</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Membre depuis{" "}
-              {new Date(user?.created_at || "").toLocaleDateString("fr-FR")}
-            </p>
-          </div>
+          {formData.profileImage ? (
+            <img
+              src={formData.profileImage}
+              alt="Profil"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+              {user.firstName?.[0]}
+            </div>
+          )}
+
+          {isEditing && (
+            <label className="flex items-center gap-2 cursor-pointer text-blue-600 hover:underline">
+              <Upload className="h-4 w-4" />
+              Changer la photo
+              <input type="file" className="hidden" onChange={handleFileChange} />
+            </label>
+          )}
         </div>
 
+        {/* Formulaire */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nom complet
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            ) : (
-              <div className="px-4 py-3 bg-gray-50 rounded-lg">{user?.name}</div>
-            )}
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Prénom */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Prénom
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.firstName}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.firstName}</div>
+              )}
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Adresse e-mail
-            </label>
-            {isEditing ? (
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, email: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            ) : (
-              <div className="px-4 py-3 bg-gray-50 rounded-lg">{user?.email}</div>
+            {/* Nom */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Nom
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.lastName}</div>
+              )}
+            </div>
+
+            {/* Date de naissance */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Date de naissance
+              </label>
+              {isEditing ? (
+                <input
+                  type="date"
+                  value={formData.dateOfBirth}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, dateOfBirth: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                  {user.dateOfBirth}
+                </div>
+              )}
+            </div>
+
+            {/* Téléphone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Numéro de téléphone
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.mobileNumber}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, mobileNumber: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.mobileNumber}</div>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Adresse e-mail
+              </label>
+              {isEditing ? (
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 rounded-lg">{user.email}</div>
+              )}
+            </div>
+
+            {/* Mot de passe */}
+            {isEditing && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nouveau mot de passe
+                  </label>
+                  <input
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, password: e.target.value }))
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirmer le mot de passe
+                  </label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </>
             )}
           </div>
         </form>
-      </div>
-
-      {/* Statistiques */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Statistiques du compte
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">
-              {stats.transactions}
-            </div>
-            <div className="text-sm text-gray-600">Transactions</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">
-              {stats.categories}
-            </div>
-            <div className="text-sm text-gray-600">Catégories actives</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">
-              {stats.total}
-            </div>
-            <div className="text-sm text-gray-600">Montant total</div>
-          </div>
-        </div>
       </div>
     </div>
   );

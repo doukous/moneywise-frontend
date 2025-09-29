@@ -12,6 +12,11 @@ export type LoginResponse = {
 };
 
 export type User = {
+  profileImage: string;
+  dateOfBirth: string;
+  mobileNumber: string;
+  lastName: string;
+  firstName: string;
   id: number;
   name: string;
   email: string;
@@ -66,14 +71,6 @@ export async function getUserProfile(): Promise<User> {
 // Mise à jour du profil utilisateur
 export async function updateUserProfile(formData: Partial<User>): Promise<User> {
   const res: AxiosResponse<User> = await axios.put(`${API_URL}/update-profile`, formData, {
-    headers: getAuthHeaders(),
-  });
-  return res.data;
-}
-
-// Statistiques globales
-export async function getUserStats(): Promise<Stats> {
-  const res: AxiosResponse<Stats> = await axios.get(`${API_URL}/stats/monthly`, {
     headers: getAuthHeaders(),
   });
   return res.data;
