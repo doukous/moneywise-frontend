@@ -1,20 +1,29 @@
 import { Form, Link } from "react-router";
+// import { useActionData } from "react-router";
 
 export default function ConnexionPage() {
+  // const actionData = useActionData();
+
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-12">
-        <Form
-          method="post"
-          className="flex flex-col items-center gap-y-8"
-        >
+        {/* {actionData && (
+          <div role="alert" className="w-96 alert alert-error alert-soft">
+            <span className="text-center text-base">{`${actionData.message}, veuillez réessayer.`}</span>
+          </div>
+        )}
+        {
+          actionData &&
+          <div className="w-96">{actionData.response}</div>
+        } */}
+        <Form method="post" className="flex flex-col items-center gap-y-8">
           <h1 className="text-3xl font-extrabold">Page de connexion</h1>
           <div className="flex flex-col">
             <label htmlFor="mail-address">Adresse mail</label>
             <input
               type="email"
               name="mail-address"
-              id="mail-adress"
+              id="mail-address"
               className="w-76 input"
               required
               placeholder="user@example.com"
@@ -30,7 +39,7 @@ export default function ConnexionPage() {
               id="password"
               className="w-76 input"
               required
-              minLength={8}
+              minLength={6}
             />
           </div>
           <button type="submit" className="w-full btn btn-accent">
@@ -41,7 +50,9 @@ export default function ConnexionPage() {
         <button type="button" className="w-76 btn btn-primary">
           Continuer avec Google
         </button>
-        <Link to="/auth/password_reset" className="text-cyan-700">Mot de passe oublié ?</Link>
+        <Link to="/auth/password_reset" className="text-cyan-700">
+          Mot de passe oublié ?
+        </Link>
         <span>
           Vous n'avez pas de compte ?{" "}
           <Link to="/auth/register" className="text-cyan-700">
