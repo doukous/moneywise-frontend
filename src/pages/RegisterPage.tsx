@@ -19,10 +19,8 @@ export default function RegisterPage() {
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-6">
         <h1 className="text-3xl font-extrabold">Page d'inscription</h1>
+        {actionData && <span>Donnés renvoyées {actionData.response}</span>}
         <Form method="post" className="flex flex-col items-center gap-y-8">
-          {actionData && (
-            <span>Data retourné : fullname : {actionData.data}</span>
-          )}
           <div className="flex flex-col">
             <label htmlFor="fullname">Nom complet</label>
             <input
@@ -56,7 +54,7 @@ export default function RegisterPage() {
               id="password"
               className="w-76 input"
               required
-              minLength={8}
+              minLength={6}
               ref={passwordRef}
             />
           </div>
