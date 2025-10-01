@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import SideBar from "../components/SideBar";
-import type { TransActionList, User } from "../lib/service/dto";
+import type { TransactionList, User } from "../lib/service/dto";
 
 function capitalizeName(fullname: string): string {
   return fullname
@@ -13,7 +13,7 @@ function capitalizeName(fullname: string): string {
 }
 
 export default function HomePage() {
-  const { user, transactions }: { user: User; transactions: TransActionList } =
+  const { user, transactions }: { user: User; transactions: TransactionList } =
     useLoaderData();
 
   return (
@@ -22,7 +22,7 @@ export default function HomePage() {
       <div className="flex-1">
         <div className="max-w-196 mx-auto px-4 h-full flex flex-col justify-around items-center gap-y-4">
           <div className="w-full flex justify-between">
-            <h1 className="text-2xl">Bonjour {capitalizeName(user.name)}</h1>
+            {user?.name && <h1 className="text-2xl">Bonjour {capitalizeName(user.name)}</h1>}
             <div className="card bg-gray-200 w-64 h-28 p-4 flex flex-col gap-y-4">
               <h2 className="font-medium">Budget</h2>
               <span className="self-end text-3xl font-bold">

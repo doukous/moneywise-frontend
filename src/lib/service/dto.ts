@@ -1,16 +1,17 @@
 export interface User {
-  id: string;
-  name: string;
+  id: string | number;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  budget: number;
-  profile_image: URL;
-  createdAt: string;
-  updatedAt: string;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> ba2b695 (merge branches)
+  budget?: number;
+  profile_image?: string | URL | null;
+  mobileNumber?: string;
+  dateOfBirth?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface PasswordResetRequestBody {
@@ -18,10 +19,6 @@ export interface PasswordResetRequestBody {
   password?: string;
   password_confirmation?: string;
   token?: string;
-<<<<<<< HEAD
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> ba2b695 (merge branches)
 }
 
 export interface RegisterRequest {
@@ -43,20 +40,18 @@ export interface LoginResponse {
 }
 
 export interface Transaction {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  id?: number;
-  name: string;
-  user_id: number;
+  id: string | number;
+  // name or description may be used
+  name?: string | null;
   amount: number;
-  category: number | null;
+  // category can be number id, string name, array or null depending on API
+  category: number | string | Array<number | string> | null;
   description?: string;
-  type: string; // 'income' | 'expense'
+  type: "income" | "expense";
   date: string; // exemple: "2023-05-25 14:20"
 }
 
-export interface TransActionList {
+export interface TransactionList {
   success: boolean;
   count: number;
   transactions: Transaction[];
@@ -66,53 +61,21 @@ export interface Category {
   id: number;
   name: string;
   type: "income" | "expense";
-=======
-=======
->>>>>>> ba2b695 (merge branches)
-  id: string;
-=======
-  id: number;
->>>>>>> 2127264 (merge)
-  name: string;
-  amount: number;
-  category: number | null;
-  description?: string;
-  type: "income" | "expense";
-  date: string; // exemple: "2023-05-25 14:20"
 }
 
-export interface TransActionList {
-  success: boolean;
-  count: number;
-  transactions: Transaction[];
-<<<<<<< HEAD
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> ba2b695 (merge branches)
+export interface Budget {
+  id: string
+  category: Category
+  amount: number
+  period: 'monthly' | 'yearly' | 'none'
 }
-<<<<<<< HEAD
-=======
 
-export interface Category {
-  id: number;
-  name: string;
-  type: "income" | "expense";
+export interface pdfReport {
+  transactions: Transaction[]
+  budget: number
+  totalIncome: number
+  totalExpense: number
+  netBalance: number
+  startDate: string
+  endDate: string
 }
->>>>>>> 2127264 (merge)
-//
-//export interface Budget {
-//    id: string
-//    category: Category
-//    amount: number
-//    period: 'monthly' | 'yearly' | 'none'
-//}
-//
-//export interface pdfReport {
-//    transactions: Transaction[]
-//    budget: number
-//    totalIncome: number
-//    totalExpense: number
-//    netBalance: number
-//    startDate: string
-//    endDate: string
-//}

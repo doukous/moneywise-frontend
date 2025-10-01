@@ -7,15 +7,7 @@ export default function ConnexionPage() {
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-12">
-        {/* {actionData && (
-          <div role="alert" className="w-96 alert alert-error alert-soft">
-            <span className="text-center text-base">{`${actionData.message}, veuillez réessayer.`}</span>
-          </div>
-        )}
-        {
-          actionData &&
-          <div className="w-96">{actionData.response}</div>
-        } */}
+        
         <Form method="post" className="flex flex-col items-center gap-y-8">
           <h1 className="text-3xl font-extrabold">Page de connexion</h1>
           <div className="flex flex-col">
