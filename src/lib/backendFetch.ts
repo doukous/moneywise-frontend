@@ -1,5 +1,6 @@
 export class BackService {
   static baseUrl = `https://moneywise-api-backend.onrender.com/api`;
+  static token = localStorage.getItem("auth_token");
 
   static async fetch(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseUrl}${endpoint}`;
@@ -7,6 +8,7 @@ export class BackService {
       ...options,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
         ...(options.headers || {}),
       },
     });
@@ -26,6 +28,11 @@ export class BackService {
   static get(endpoint: string, options: RequestInit = {}) {
     return this.fetch(endpoint, {
       ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+        ...(options.headers || {}),
+      },
       method: "GET",
     });
   }
@@ -33,6 +40,11 @@ export class BackService {
   static post<T>(endpoint: string, body: T, options: RequestInit = {}) {
     return this.fetch(endpoint, {
       ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+        ...(options.headers || {}),
+      },
       method: "POST",
       body: JSON.stringify(body),
     });
@@ -41,6 +53,11 @@ export class BackService {
   static async update<T>(endpoint: string, body: T, options: RequestInit = {}) {
     return BackService.fetch(endpoint, {
       ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+        ...(options.headers || {}),
+      },
       method: "PUT",
       body: JSON.stringify(body),
     });
@@ -48,6 +65,12 @@ export class BackService {
 
   static async delete(endpoint: string, options: RequestInit = {}) {
     return BackService.fetch(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+        ...(options.headers || {}),
+      },
+
       ...options,
       method: "DELETE",
     });

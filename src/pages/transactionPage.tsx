@@ -1,84 +1,29 @@
 import { Form } from "react-router";
 import "../index.css";
-import { TransactionList } from "../components/transactionList";
-import type { Transaction } from "../lib/service/dto";
+import type {
+  Transaction,
+  TransActionList,
+  User,
+  Category,
+} from "../lib/service/dto";
 import { useState } from "react";
-
-const user = {
-  name: "John Doe",
-  imageUrl:
-    "https://cdn.pixabay.com/photo/2023/05/02/10/35/avatar-7964945_1280.png",
-};
-
-const categories = [
-  {
-    id: 1,
-    name: "Shopping",
-    type: "expense",
-  },
-  {
-    id: 2,
-    name: "Food",
-    type: "expense",
-  },
-  {
-    id: 3,
-    name: "Job",
-    type: "income",
-  },
-  {
-    id: 4,
-    name: "Transport",
-    type: "expense",
-  },
-  {
-    id: 5,
-    name: "Entertainment",
-    type: "income",
-  },
-];
-
-const trans: Transaction[] = [
-  {
-    id: "1",
-    name: "Achat Amazon",
-    amount: 50,
-    date: "2023-10-01 10:00",
-    category: 1,
-    type: "expense",
-  },
-  {
-    id: "2",
-    name: "Salaire",
-    amount: 2000,
-    category: 5,
-    type: "income",
-    date: "2023-10-01 09:00",
-  },
-  {
-    id: "3",
-    name: "Dîner au restaurant",
-    amount: 80,
-    category: 4,
-    type: "expense",
-    date: "2023-10-02 20:00",
-  },
-  {
-    id: "4",
-    name: "Vente de vélo",
-    amount: 300,
-    category: 3,
-    type: "income",
-    date: "2023-10-03 15:30",
-  },
-];
+import { useLoaderData } from "react-router";
+import { TransactionList } from "../components/transactionList";
 
 export function TransactionPage() {
-  const [transactions, setTransactionList] = useState<Transaction[]>(trans);
+  const {
+    user,
+    trans,
+    categories,
+  }: { user: User; trans: TransActionList; categories: Category[] } =
+    useLoaderData();
+  const [transactions, setTransactionList] = useState<Transaction[]>(
+    trans.transactions,
+  );
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
     if (query === "") {
-      setTransactionList(trans);
+      setTransactionList(trans.transactions);
       return;
     }
     if (row === "Nom" && query !== "") {
@@ -106,7 +51,7 @@ export function TransactionPage() {
           <div className=" flex items-center gap-x-2" id="avatar">
             <div className=" font-semibold">{user.name}</div>
             <div className="w-10 h-10 rounded-full">
-              <img src={user.imageUrl} alt="profile pic" />
+              <img src={`${user.profile_image}`} alt="profile pic" />
             </div>
           </div>
         </div>

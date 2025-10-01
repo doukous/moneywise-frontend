@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Transaction } from "../lib/service/dto";
 
 type Category = { id: number; name: string; type: string };
@@ -7,8 +7,6 @@ type Props = {
   trans: Transaction;
   setTrans: React.Dispatch<React.SetStateAction<Transaction>>;
   cate: Category[];
-  newcate: string;
-  setNewCate: React.Dispatch<React.SetStateAction<string>>;
   down: boolean;
   setDown: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
@@ -18,24 +16,27 @@ export function TransactionForm({
   trans,
   setTrans,
   cate,
-  newcate,
-  setNewCate,
   down,
   setDown,
   onClose,
 }: Props) {
+  const [newcate, setNewCate] = useState<Category>({
+    id: 0,
+    name: "",
+    type: "expense",
+  });
   const newCate = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     // Keep existing behavior: add locally to the cate array (parent should persist)
-    if (newcate && newcate.trim() !== "") {
-      cate.push({ id: 0, name: newcate.trim(), type: "expense" });
-      setNewCate("");
+    if (newcate && newcate.name.trim() !== "") {
+      cate.push({ id: 0, name: newcate.name.trim(), type: "expense" });
+      setNewCate({ id: 0, name: "", type: "expense" });
     }
   };
 
   const saveTransaction = () => {
     // The app persists transactions elsewhere. Keep existing behavior: reset id and close.
-    trans.id = "";
+    trans.id = 0;
     setTrans(trans);
     onClose();
   };
@@ -150,10 +151,24 @@ export function TransactionForm({
                       <input
                         type="text"
                         className="input input-bordered w-full"
-                        onChange={(e) => setNewCate(e.target.value)}
-                        value={newcate}
+                        onChange={(e) =>
+                          setNewCate({ ...newcate, name: e.target.value })
+                        }
+                        value={newcate.name}
                         placeholder="nouvelle catégorie"
                       />
+                      <select
+                        id="type"
+                        value={newcate.type || "expense"}
+                        onChange={(e) =>
+                          setNewCate({ ...newcate, type: e.target.value })
+                        }
+                        className="select select-bordered w-full"
+                        aria-label="Type de transaction"
+                      >
+                        <option value="expense">Dépense</option>
+                        <option value="income">Revenu</option>
+                      </select>
                       <button
                         type="button"
                         onClick={(e) => newCate(e)}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Transaction } from "../lib/service/dto";
+import type { Transaction, Category } from "../lib/service/dto";
 import TransactionForm from "./TransactionForm";
 
 export function TransactionList({
@@ -7,15 +7,15 @@ export function TransactionList({
   cate,
 }: {
   tlist: Transaction[];
-  cate: { id: number; name: string; type: string }[];
+  cate: Category[];
 }) {
   const [modal, setModal] = useState(false);
-  const [newcate, setcate] = useState("");
   const [down, setDown] = useState(false);
   const [trans, setTrans] = useState<Transaction>({
-    id: "",
+    id: 0,
     name: "",
     amount: 0,
+    user_id: 0,
     date: "",
     category: null,
     type: "",
@@ -29,9 +29,10 @@ export function TransactionList({
   };
   const handleAdd = () => {
     setTrans({
-      id: "",
+      id: 0,
       name: "",
       amount: 0,
+      user_id: 0,
       date: "",
       category: null,
       type: "expense",
@@ -56,8 +57,6 @@ export function TransactionList({
                   trans={trans}
                   setTrans={setTrans}
                   cate={cate}
-                  newcate={newcate}
-                  setNewCate={setcate}
                   down={down}
                   setDown={setDown}
                   onClose={() => setModal(false)}

@@ -4,24 +4,6 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import { TransactionPage } from "./pages/transactionPage";
 import NotFoundPage from "./pages/404";
-
-<<<<<<< HEAD
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    Component: HomePage,
-  },
-  {
-    path: "auth",
-=======
-import Profile from "./pages/profile";
-import { createBrowserRouter, redirect } from "react-router";
-import { BackService } from "./lib/backendFetch";
-import { TransactionPage } from "./pages/transactionPage";
-import ConnexionPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/404";
 import Profile from "./pages/profile";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
@@ -30,9 +12,11 @@ import type {
   RegisterRequest,
   LoginRequest,
   LoginResponse,
-  TransactionList,
+  TransActionList,
+  Category,
 } from "./lib/service/dto";
->>>>>>> main
+import { redirect } from "react-router";
+import { BackService } from "./lib/backendFetch";
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
@@ -49,18 +33,19 @@ function authMiddleware() {
 
 async function dashboardDataLoader() {
   const token = localStorage.getItem("auth_token");
-  const user = await BackService.get("/api/me", {
+  const user = await BackService.get("/me", {
     headers: { authorization: `Bearer ${token}` },
   });
 
-  const transactions: TransactionList = await BackService.get(
-    "/api/transactions",
-    {
-      headers: { authorization: `Bearer ${token}` },
-    }
-  );
+  const categories: Category[] = await BackService.get("/categories", {
+    headers: { authorization: `Bearer ${token}` },
+  });
 
-  return { user: user, transactions: transactions };
+  const transactions: TransActionList = await BackService.get("/transactions", {
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  return { user: user, transactions: transactions, categories: categories };
 }
 
 export const router = createBrowserRouter([
@@ -69,10 +54,10 @@ export const router = createBrowserRouter([
     middleware: [authMiddleware],
     children: [
       {
-<<<<<<< HEAD
         path: "login",
         Component: ConnexionPage,
-=======
+      },
+      {
         path: "",
         loader: dashboardDataLoader,
         Component: HomePage,
@@ -83,6 +68,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "transactions",
+        loader: dashboardDataLoader,
         Component: TransactionPage,
       },
       {
@@ -111,28 +97,27 @@ export const router = createBrowserRouter([
           };
 
           const response: LoginResponse = await BackService.post(
-            "/api/login",
-            requestBody
+            "/login",
+            requestBody,
           );
+
+          console.log(response);
 
           if (response.access_token) {
             localStorage.setItem("auth_token", response.access_token);
             localStorage.setItem(
               "auth_token_creation_time",
-              Date.now().toString()
+              Date.now().toString(),
             );
             return redirect("/");
           }
 
           return { response: JSON.stringify(response) };
         },
->>>>>>> main
       },
       {
         path: "register",
         Component: RegisterPage,
-<<<<<<< HEAD
-=======
         action: async ({ request }) => {
           const data = await request.formData();
 
@@ -142,7 +127,7 @@ export const router = createBrowserRouter([
             password: data.get("password")!.toString(),
           };
 
-          const response = await BackService.post("/api/register", requestBody);
+          const response = await BackService.post("/register", requestBody);
           if (response) return redirect("/login");
 
           return { response: JSON.stringify(response) };
@@ -151,7 +136,6 @@ export const router = createBrowserRouter([
       {
         path: "password_reset",
         Component: ForgottenPasswordPage,
->>>>>>> main
       },
     ],
   },
@@ -160,22 +144,15 @@ export const router = createBrowserRouter([
     Component: TransactionPage,
   },
   {
-<<<<<<< HEAD
-    path: "/*",
-=======
-    path: "/profil",  
+    path: "/profil",
     Component: Profile,
   },
-
-{
-  path: "/reports",
-  Component: Reports,
-},
-
   {
-    path: "/*",
+    path: "/reports",
+    Component: Reports,
+  },
+  {
     path: "*",
->>>>>>> main
     Component: NotFoundPage,
   },
 ]);
