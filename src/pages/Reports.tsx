@@ -7,7 +7,11 @@ import * as XLSX from "xlsx";
 
 const Reports: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [monthlyReport, setMonthlyReport] = useState<{ income: number; expense: number; balance: number }>({
+  const [monthlyReport, setMonthlyReport] = useState<{
+    income: number;
+    expense: number;
+    balance: number;
+  }>({
     income: 0,
     expense: 0,
     balance: 0,
@@ -21,11 +25,11 @@ const Reports: React.FC = () => {
 
         // Calcul rapide du rapport
         const income = data
-          .filter((t) => t.type === "income")
-          .reduce((sum, t) => sum + t.amount, 0);
+          .filter((t: Transaction) => t.type === "income")
+          .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
         const expense = data
-          .filter((t) => t.type === "expense")
-          .reduce((sum, t) => sum + t.amount, 0);
+          .filter((t: Transaction) => t.type === "expense")
+          .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
 
         setMonthlyReport({
           income,
@@ -33,7 +37,9 @@ const Reports: React.FC = () => {
           balance: income - expense,
         });
       })
-      .catch((err) => console.error("Erreur lors du chargement des transactions :", err));
+      .catch((err) =>
+        console.error("Erreur lors du chargement des transactions :", err),
+      );
   }, []);
 
   // Export PDF
@@ -42,7 +48,11 @@ const Reports: React.FC = () => {
     doc.text("Rapport Mensuel des Transactions", 20, 20);
     let y = 30;
     transactions.forEach((t) => {
-      doc.text(`${t.date} - ${t.category} - ${t.type} - ${t.amount} CFA`, 20, y);
+      doc.text(
+        `${t.date} - ${t.category} - ${t.type} - ${t.amount} CFA`,
+        20,
+        y,
+      );
       y += 10;
     });
     doc.text(`Total Revenu: ${monthlyReport.income} CFA`, 20, y + 10);
@@ -67,15 +77,21 @@ const Reports: React.FC = () => {
       {/* Résumé */}
       <div className="bg-white shadow rounded-lg p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="text-center">
-          <div className="text-lg font-bold text-green-600">{monthlyReport.income} CFA</div>
+          <div className="text-lg font-bold text-green-600">
+            {monthlyReport.income} CFA
+          </div>
           <div className="text-sm text-gray-500">Revenus</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-red-600">{monthlyReport.expense} CFA</div>
+          <div className="text-lg font-bold text-red-600">
+            {monthlyReport.expense} CFA
+          </div>
           <div className="text-sm text-gray-500">Dépenses</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-blue-600">{monthlyReport.balance} CFA</div>
+          <div className="text-lg font-bold text-blue-600">
+            {monthlyReport.balance} CFA
+          </div>
           <div className="text-sm text-gray-500">Solde</div>
         </div>
       </div>

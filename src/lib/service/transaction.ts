@@ -47,4 +47,16 @@ export class TransactionService {
     }
     return response.json();
   }
+
+  static async getAll() {
+    const response = await BackService.get(this.endpoint, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch transactions: ${response.statusText}`);
+    }
+    return response.json() as Transaction[];
+  }
 }
