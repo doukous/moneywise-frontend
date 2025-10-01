@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { Transaction } from "../lib/service/dto";
+import { BackService } from "../lib/backendFetch";
 
 type Category = { id: number; name: string; type: string };
 
@@ -27,11 +28,21 @@ export function TransactionForm({
   });
   const newCate = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
-    // Keep existing behavior: add locally to the cate array (parent should persist)
+    // comportement existant : ajouter localement au tableau cate (parent devrait persister)
     if (newcate && newcate.name.trim() !== "") {
       cate.push({ id: 0, name: newcate.name.trim(), type: "expense" });
       setNewCate({ id: 0, name: "", type: "expense" });
     }
+
+    // post sur le serveur
+    BackService.post<Category>("/categories", newcate)
+      .then((response) => {
+        cate.push(response.data);
+        setNewCate({ id: 0, name: "", type: "expense" });
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la création de la catégorie :", error);
+      });
   };
 
   const saveTransaction = () => {
@@ -121,7 +132,7 @@ export function TransactionForm({
               <label className="label hidden" htmlFor="category">
                 Catégorie
               </label>
-
+              {/*Categorie, show or add new*/}
               <div className="flex flex-col gap-2 w-full">
                 {trans.category !== null && trans.category !== undefined ? (
                   <span
@@ -143,7 +154,7 @@ export function TransactionForm({
                 )}
               </div>
 
-              {/* NOTE: Keep the existing down-modal block unchanged as requested */}
+              {/* To add new category */}
               {down === true ? (
                 <div className=" inset-0 w-80 h-full bg-base-100/60 flex items-center justify-center">
                   <div className="w-full max-w-96 bg-base-100 p-4 rounded shadow border">
