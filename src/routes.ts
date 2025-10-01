@@ -1,6 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
@@ -22,6 +23,8 @@ import type {
   Category,
 } from "./lib/service/dto";
 =======
+=======
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 import { TransactionPage } from "./pages/transactionPage";
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -31,6 +34,7 @@ import Profile from "./pages/profile";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+<<<<<<< HEAD
 =======
 import { TransactionPage } from "./pages/transactionPage";
 import ConnexionPage from "./pages/LoginPage";
@@ -42,6 +46,8 @@ import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 >>>>>>> ba2b695 (merge branches)
+=======
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 import { dashboardDataLoader } from "./lib/loaders";
 import {
   forgottenPasswordAction,
@@ -49,9 +55,12 @@ import {
   registerAction,
 } from "./lib/actions";
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> ba2b695 (merge branches)
 =======
 >>>>>>> ba2b695 (merge branches)
+=======
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
@@ -66,6 +75,7 @@ function authMiddleware() {
   }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 async function dashboardDataLoader() {
@@ -89,6 +99,8 @@ async function dashboardDataLoader() {
 >>>>>>> ba2b695 (merge branches)
 =======
 >>>>>>> ba2b695 (merge branches)
+=======
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -99,7 +111,7 @@ export const router = createBrowserRouter([
         Component: ConnexionPage,
       },
       {
-        path: "",
+        index: true,
         loader: dashboardDataLoader,
         Component: HomePage,
       },
@@ -129,6 +141,7 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: ConnexionPage,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         action: async ({ request }) => {
@@ -163,10 +176,14 @@ export const router = createBrowserRouter([
 =======
         action: loginAction,
 >>>>>>> ba2b695 (merge branches)
+=======
+        action: loginAction,
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
       },
       {
         path: "register",
         Component: RegisterPage,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         action: async ({ request }) => {
@@ -189,6 +206,9 @@ export const router = createBrowserRouter([
 =======
         action: registerAction,
 >>>>>>> ba2b695 (merge branches)
+=======
+        action: registerAction,
+>>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
       },
       {
         path: "password_reset",
