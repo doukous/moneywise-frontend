@@ -45,6 +45,7 @@ export interface LoginResponse {
 export interface Transaction {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   id?: number;
   name: string;
   user_id: number;
@@ -69,15 +70,18 @@ export interface Category {
 =======
 >>>>>>> ba2b695 (merge branches)
   id: string;
+=======
+  id: number;
+>>>>>>> 2127264 (merge)
   name: string;
   amount: number;
-  category: string[];
+  category: number | null;
   description?: string;
   type: "income" | "expense";
   date: string; // exemple: "2023-05-25 14:20"
 }
 
-export interface TransactionList {
+export interface TransActionList {
   success: boolean;
   count: number;
   transactions: Transaction[];
@@ -86,6 +90,15 @@ export interface TransactionList {
 =======
 >>>>>>> ba2b695 (merge branches)
 }
+<<<<<<< HEAD
+=======
+
+export interface Category {
+  id: number;
+  name: string;
+  type: "income" | "expense";
+}
+>>>>>>> 2127264 (merge)
 //
 //export interface Budget {
 //    id: string

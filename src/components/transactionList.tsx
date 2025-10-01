@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Transaction, Category } from "../lib/service/dto";
 import TransactionForm from "./TransactionForm";
 
+<<<<<<< HEAD
 export function TransactionList({
   tlist,
   cate,
@@ -20,6 +21,42 @@ export function TransactionList({
     category: null,
     type: "",
   });
+=======
+const transactions: Transaction[] = [
+    {
+        id: 1,
+        name: "Achat Amazon",
+        amount: 50,
+        date: "2023-10-01 10:00",
+        category: ["Shopping", "Online"],
+        type: "expense"
+    },
+    {
+        id: "2",
+        name: "Salaire",
+        amount: 2000,
+        category: ["Income", "Job"],
+        type: "income",
+        date: "2023-10-01 09:00"
+    },
+    {
+        id: "3",
+        name: "Dîner au restaurant",
+        amount: 80,
+        category: ["Food", "Dining"],
+        type: "expense",
+        date: "2023-10-02 20:00"
+    },
+    {
+        id: "4",
+        name: "Vente de vélo",
+        amount: 300,
+        category: ["Income", "Sale"],
+        type: "income",
+        date: "2023-10-03 15:30"
+    },
+]
+>>>>>>> 2127264 (merge)
 
   const editTransaction = (transedit: Transaction) => {
     // prepare form for editing (currently just logs)
