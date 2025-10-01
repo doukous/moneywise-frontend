@@ -3,11 +3,8 @@ import { Edit, Save, X, Upload } from "lucide-react";
 import {
   getUserProfile,
   updateUserProfile,
-  getUserStats,
   type User,
-  type Stats,
 } from "../services/auth";
-import LogoutButton from "../components/LogoutButton";
 import SideBar from "../components/SideBar";
 
 const Profile: React.FC = () => {

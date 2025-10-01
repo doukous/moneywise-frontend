@@ -1,30 +1,4 @@
 import { createBrowserRouter, redirect } from "react-router";
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-import ConnexionPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
-import { TransactionPage } from "./pages/transactionPage";
-import NotFoundPage from "./pages/404";
-
-import Profile from "./pages/profile";
-
-import { BackService } from "./lib/backendFetch";
-
-import Reports from "./pages/Reports";
-import StatisticsPage from "./pages/StatisticsPage";
-import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
-import type {
-  RegisterRequest,
-  LoginRequest,
-  LoginResponse,
-  TransActionList,
-  Category,
-} from "./lib/service/dto";
-=======
-=======
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 import { TransactionPage } from "./pages/transactionPage";
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -34,33 +8,12 @@ import Profile from "./pages/profile";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
-<<<<<<< HEAD
-=======
-import { TransactionPage } from "./pages/transactionPage";
-import ConnexionPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/404";
-import Profile from "./pages/profile";
-import Reports from "./pages/Reports";
-import StatisticsPage from "./pages/StatisticsPage";
-import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 import { dashboardDataLoader } from "./lib/loaders";
 import {
   forgottenPasswordAction,
   loginAction,
   registerAction,
 } from "./lib/actions";
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
@@ -75,41 +28,11 @@ function authMiddleware() {
   }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-async function dashboardDataLoader() {
-  const token = localStorage.getItem("auth_token");
-  const user = await BackService.get("/me", {
-    headers: { authorization: `Bearer ${token}` },
-  });
-
-  const categories: Category[] = await BackService.get("/categories", {
-    headers: { authorization: `Bearer ${token}` },
-  });
-
-  const transactions: TransActionList = await BackService.get("/transactions", {
-    headers: { authorization: `Bearer ${token}` },
-  });
-
-  return { user: user, transactions: transactions, categories: categories };
-}
-
-=======
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> ba2b695 (merge branches)
-=======
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
 export const router = createBrowserRouter([
   {
     path: "/",
     middleware: [authMiddleware],
     children: [
-      {
-        path: "login",
-        Component: ConnexionPage,
-      },
       {
         index: true,
         loader: dashboardDataLoader,
@@ -141,74 +64,12 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: ConnexionPage,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        action: async ({ request }) => {
-          const data = await request.formData();
-
-          const requestBody: LoginRequest = {
-            email: data.get("mail-address")!.toString(),
-            password: data.get("password")!.toString(),
-          };
-
-          const response: LoginResponse = await BackService.post(
-            "/login",
-            requestBody,
-          );
-
-          console.log(response);
-
-          if (response.access_token) {
-            localStorage.setItem("auth_token", response.access_token);
-            localStorage.setItem(
-              "auth_token_creation_time",
-              Date.now().toString(),
-            );
-            return redirect("/");
-          }
-
-          return { response: JSON.stringify(response) };
-        },
-=======
-        action: loginAction,
->>>>>>> ba2b695 (merge branches)
-=======
-        action: loginAction,
->>>>>>> ba2b695 (merge branches)
-=======
-        action: loginAction,
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
+        action: loginAction
       },
       {
         path: "register",
         Component: RegisterPage,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        action: async ({ request }) => {
-          const data = await request.formData();
-
-          const requestBody: RegisterRequest = {
-            name: data.get("fullname")!.toString(),
-            email: data.get("mail-address")!.toString(),
-            password: data.get("password")!.toString(),
-          };
-
-          const response = await BackService.post("/register", requestBody);
-          if (response) return redirect("/login");
-
-          return { response: JSON.stringify(response) };
-        },
-=======
-        action: registerAction,
->>>>>>> ba2b695 (merge branches)
-=======
-        action: registerAction,
->>>>>>> ba2b695 (merge branches)
-=======
-        action: registerAction,
->>>>>>> 6e4f4b2 (déplacement des actions dans un fichier séparé pour une meilleure lisibilité du fichier des routes)
+        action: registerAction
       },
       {
         path: "password_reset",
