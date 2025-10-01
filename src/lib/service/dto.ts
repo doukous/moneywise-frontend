@@ -6,7 +6,6 @@ export interface User {
   email: string;
   budget?: number;
   profile_image?: string | URL | null;
-  profileImage?: string | null;
   mobileNumber?: string;
   dateOfBirth?: string;
   createdAt?: string;
@@ -58,27 +57,25 @@ export interface TransactionList {
   transactions: Transaction[];
 }
 
-export type TransActionList = TransactionList;
-
 export interface Category {
   id: number;
   name: string;
   type: "income" | "expense";
 }
 
-// export interface Budget {
-//   id: string
-//   category: Category
-//   amount: number
-//   period: 'monthly' | 'yearly' | 'none'
-// }
-//
-// export interface pdfReport {
-//   transactions: Transaction[]
-//   budget: number
-//   totalIncome: number
-//   totalExpense: number
-//   netBalance: number
-//   startDate: string
-//   endDate: string
-// }
+export interface Budget {
+  id: string
+  category: Category
+  amount: number
+  period: 'monthly' | 'yearly' | 'none'
+}
+
+export interface pdfReport {
+  transactions: Transaction[]
+  budget: number
+  totalIncome: number
+  totalExpense: number
+  netBalance: number
+  startDate: string
+  endDate: string
+}
