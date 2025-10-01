@@ -1,34 +1,50 @@
 import type { Transaction } from "./dto";
+//import type { LoginResponse } from "./dto";
 import { BackService } from "../backendFetch.js";
 
 export class TransactionService {
-    static endpoint = '/transactions';
+  static endpoint = "/transactions";
+  static token = localStorage.getItem("auth_token");
 
-    static getAll(): Promise<Transaction[]> {
-        return BackService.get(this.endpoint);
+  static async create(transaction: Transaction) {
+    const response = await BackService.post(this.endpoint, transaction, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    console.log(response);
+    if (!response.ok) {
+      return response.statusText;
     }
+    return response.json();
+  }
 
-    static getById(id: string): Promise<Transaction> {
-        return BackService.get(`${this.endpoint}/${id}`);
+  static async update(transaction: Transaction) {
+    const response = await fetch(`${this.endpoint}/${transaction.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transaction),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update transaction: ${response.statusText}`);
     }
+    return response.json();
+  }
 
-    static create(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
-        return BackService.post(`${this.endpoint}/create`, transaction);
+  static async delete(id: number) {
+    const response = await fetch(`${this.endpoint}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete transaction: ${response.statusText}`);
     }
-
-    static update(id: string, transaction: Partial<Omit<Transaction, 'id'>>): Promise<Transaction> {
-        return BackService.update(`${this.endpoint}/${id}`, transaction);
-    }
-
-    static delete(id: string): Promise<void> {
-        return BackService.delete(`${this.endpoint}/${id}`);
-    }
-
-    static filterByDateRange(startDate: string, endDate: string): Promise<Transaction[]> {
-        return BackService.get(`${this.endpoint}?startDate=${startDate}&endDate=${endDate}`);
-    }
-
-    static filterByCategory(category: string, data: Transaction[]): Promise<Transaction[]> {
-        return Promise.resolve(data.filter(transaction => transaction.category.includes(category)));
-    }
+    return response.json();
+  }
 }

@@ -1,19 +1,19 @@
 import { useLoaderData } from "react-router";
 import SideBar from "../components/SideBar";
-import type { TransactionList, User } from "../lib/service/dto";
+import type { TransActionList, User } from "../lib/service/dto";
 
 function capitalizeName(fullname: string): string {
   return fullname
     .split(" ")
     .map(
       (name: string) =>
-        name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+        name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
     )
     .join(" ");
 }
 
 export default function HomePage() {
-  const { user, transactions }: { user: User; transactions: TransactionList } =
+  const { user, transactions }: { user: User; transactions: TransActionList } =
     useLoaderData();
 
   return (
