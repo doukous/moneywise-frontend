@@ -1,5 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
@@ -30,12 +31,26 @@ import Profile from "./pages/profile";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+=======
+import { TransactionPage } from "./pages/transactionPage";
+import ConnexionPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/404";
+import Profile from "./pages/profile";
+import Reports from "./pages/Reports";
+import StatisticsPage from "./pages/StatisticsPage";
+import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+>>>>>>> ba2b695 (merge branches)
 import { dashboardDataLoader } from "./lib/loaders";
 import {
   forgottenPasswordAction,
   loginAction,
   registerAction,
 } from "./lib/actions";
+<<<<<<< HEAD
+>>>>>>> ba2b695 (merge branches)
+=======
 >>>>>>> ba2b695 (merge branches)
 
 function authMiddleware() {
@@ -51,6 +66,7 @@ function authMiddleware() {
   }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 async function dashboardDataLoader() {
   const token = localStorage.getItem("auth_token");
@@ -69,6 +85,8 @@ async function dashboardDataLoader() {
   return { user: user, transactions: transactions, categories: categories };
 }
 
+=======
+>>>>>>> ba2b695 (merge branches)
 =======
 >>>>>>> ba2b695 (merge branches)
 export const router = createBrowserRouter([
@@ -112,6 +130,7 @@ export const router = createBrowserRouter([
         path: "login",
         Component: ConnexionPage,
 <<<<<<< HEAD
+<<<<<<< HEAD
         action: async ({ request }) => {
           const data = await request.formData();
 
@@ -141,10 +160,14 @@ export const router = createBrowserRouter([
 =======
         action: loginAction,
 >>>>>>> ba2b695 (merge branches)
+=======
+        action: loginAction,
+>>>>>>> ba2b695 (merge branches)
       },
       {
         path: "register",
         Component: RegisterPage,
+<<<<<<< HEAD
 <<<<<<< HEAD
         action: async ({ request }) => {
           const data = await request.formData();
@@ -160,6 +183,9 @@ export const router = createBrowserRouter([
 
           return { response: JSON.stringify(response) };
         },
+=======
+        action: registerAction,
+>>>>>>> ba2b695 (merge branches)
 =======
         action: registerAction,
 >>>>>>> ba2b695 (merge branches)

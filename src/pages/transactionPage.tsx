@@ -1,6 +1,7 @@
 import { Form } from "react-router";
 import "../index.css";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import type {
   Transaction,
   TransActionList,
@@ -9,6 +10,8 @@ import type {
 } from "../lib/service/dto";
 import { useState } from "react";
 import { useLoaderData } from "react-router";
+=======
+>>>>>>> ba2b695 (merge branches)
 =======
 >>>>>>> ba2b695 (merge branches)
 import { TransactionList } from "../components/transactionList";
@@ -170,6 +173,9 @@ export function TransactionPage() {
         <div className="w-full h-full px-4 overflow-y-auto">
           <TransactionList />
         </div>
+<<<<<<< HEAD
+>>>>>>> ba2b695 (merge branches)
+=======
 >>>>>>> ba2b695 (merge branches)
       </div>
     </div>

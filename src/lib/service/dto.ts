@@ -7,7 +7,10 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> ba2b695 (merge branches)
 }
 
 export interface PasswordResetRequestBody {
@@ -15,6 +18,9 @@ export interface PasswordResetRequestBody {
   password?: string;
   password_confirmation?: string;
   token?: string;
+<<<<<<< HEAD
+>>>>>>> ba2b695 (merge branches)
+=======
 >>>>>>> ba2b695 (merge branches)
 }
 
@@ -38,6 +44,7 @@ export interface LoginResponse {
 
 export interface Transaction {
 <<<<<<< HEAD
+<<<<<<< HEAD
   id?: number;
   name: string;
   user_id: number;
@@ -59,6 +66,8 @@ export interface Category {
   name: string;
   type: "income" | "expense";
 =======
+=======
+>>>>>>> ba2b695 (merge branches)
   id: string;
   name: string;
   amount: number;
@@ -72,6 +81,9 @@ export interface TransactionList {
   success: boolean;
   count: number;
   transactions: Transaction[];
+<<<<<<< HEAD
+>>>>>>> ba2b695 (merge branches)
+=======
 >>>>>>> ba2b695 (merge branches)
 }
 //
