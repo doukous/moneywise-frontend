@@ -79,3 +79,33 @@ export interface pdfReport {
   startDate: string
   endDate: string
 }
+
+export interface CategoryStats {
+    [categoryName: string]: { income: number; expense: number; };
+}
+
+export interface MonthlyStats {
+    [month: string]: { income: number; expense: number; };
+}
+
+export interface SummaryStats {
+    total_income: number;
+    total_expense: number;
+    balance: number;
+    budget: number;
+}
+
+export interface CategoryStatsResponse {
+    success: boolean;
+    stats_by_category: CategoryStats;
+}
+
+export interface MonthlyStatsResponse {
+    success: boolean;
+    stats_by_month: MonthlyStats;
+}
+
+export interface SummaryStatsResponse {
+    success: boolean;
+    summary: SummaryStats;
+}

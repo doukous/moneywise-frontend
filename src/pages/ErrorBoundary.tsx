@@ -18,12 +18,7 @@ export default function ErrorBoundary() {
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center gap-y-12">
-      <h1>Unexpected Error</h1>
-      <p>
-        {error instanceof Error
-          ? error.message
-          : String(error ?? "Unknown error")}
-      </p>
+      <h1 className="text-2xl text-center">Une erreur est sruvenue, veuillez réessayer</h1>
       <NavLink to={location.pathname} className="btn btn-primary">
         Recharger la page
       </NavLink>

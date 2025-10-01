@@ -15,10 +15,7 @@ export async function loginAction({ request }: { request: Request }) {
     password: data.get("password")!.toString(),
   };
 
-  const response: LoginResponse = await BackService.post(
-    "/api/login",
-    requestBody
-  );
+  const response: LoginResponse = await BackService.post("/login", requestBody);
 
   if (response.access_token) {
     localStorage.setItem("auth_token", response.access_token);
@@ -38,7 +35,7 @@ export async function registerAction({ request }: { request: Request }) {
     password: data.get("password")!.toString(),
   };
 
-  const response = await BackService.post("/api/register", requestBody);
+  const response = await BackService.post("/register", requestBody);
   if (response) return redirect("auth/login");
 
   return { response: JSON.stringify(response) };
@@ -58,10 +55,7 @@ export async function forgottenPasswordAction({
   };
 
   if (submitType == "submit-email") {
-    const response = await BackService.post(
-      "/api/forgot-password",
-      requestBody
-    );
+    const response = await BackService.post("/forgot-password", requestBody);
     return { response: response, email: email };
   }
 
@@ -69,6 +63,6 @@ export async function forgottenPasswordAction({
   requestBody["password_confirmation"] = data.get("password")!.toString();
 
   requestBody["token"] = data.get("token")!.toString();
-  const response = await BackService.post("/api/reset-password", requestBody);
+  const response = await BackService.post("/reset-password", requestBody);
   return { response: response };
 }

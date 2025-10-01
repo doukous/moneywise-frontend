@@ -1,95 +1,79 @@
-import { ChartPie, Inbox, LogOut, User, Wallet } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router";
+import {
+  ChartPie,
+  Inbox,
+  LogOut,
+  User,
+  Wallet,
+  FileChartColumn,
+} from "lucide-react";
+import { Link, NavLink } from "react-router";
+import { useRef } from "react";
 
 export default function SideBar() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [width, setWidth] = useState(1400);
+  const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `h-12 rounded-xl flex items-center justify-center md:justify-start gap-x-4 md:px-4 transition-colors duration-200 ${
+      isActive ? "bg-primary text-primary-content" : "hover:bg-base-300"
+    }`;
 
-  useEffect(() => {
-    function handleResize() {
-      if (containerRef.current) {
-        setWidth(window.innerWidth);
-      }
-    }
+  const modalRef = useRef<HTMLDialogElement>(null);
 
-    handleResize();
+    return (
+    <>
+      <div
+        id="sidebar"
+        className="fixed bottom-0 w-full flex justify-around bg-base-100 p-2 z-50
+                 md:relative md:h-full md:w-22 md:flex-col md:justify-start md:py-8 md:px-4 md:gap-y-4 md:bg-base-200
+                 lg:w-48 transition-all duration-300"
+      >
+        <h1 className="font-bold text-center text-2xl hidden lg:block">
+          MoneyWise
+        </h1>
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+        <NavLink to="/" className={getNavLinkClass}>
+          <Inbox />
+          <span className="hidden lg:inline">Dashboard</span>
+        </NavLink>
+        <NavLink to="/profil" className={getNavLinkClass}>
+          <User />
+          <span className="hidden lg:inline">Profil</span>
+        </NavLink>
+        <NavLink to="/transactions" className={getNavLinkClass}>
+          <Wallet />
+          <span className="hidden lg:inline">Transactions</span>
+        </NavLink>
+        <NavLink to="/statistiques" className={getNavLinkClass}>
+          <ChartPie />
+          <span className="hidden lg:inline">Statistiques</span>
+        </NavLink>
+        <NavLink to="/reports" className={getNavLinkClass}>
+          <FileChartColumn />
+          <span className="hidden lg:inline">Rapport</span>
+        </NavLink>
 
-  return (
-    <div
-      ref={containerRef}
-      id="sidebar"
-      className={
-        width < 800 ?
-        `bottom-0 bg-white fixed w-full flex justify-around`
-        :
-        `${width < 1000 ? 'w-22' : 'w-48'} h-full shrink-0 bg-stone-200 flex flex-col py-8 px-4 gap-y-4`
-      }  
-    >
-    {
-      width > 1000 &&
-      <h1 className="font-bold text-center text-2xl">MoneyWise</h1>
-    }
+        <button
+          className="h-12 rounded-xl flex items-center justify-center md:justify-start gap-x-4 md:px-4 transition-colors duration-200 hover:bg-base-300 md:mt-auto"
+          onClick={() => modalRef.current?.showModal()}
+        >
+          <LogOut />
+          <span className="hidden lg:inline">Déconnexion</span>
+        </button>
+      </div>
 
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          `{${width > 800 ? 'w-full' : 'w-fit'} h-12 rounded-xl flex items-center px-4 gap-x-4 ${
-            isActive && "bg-amber-300"
-          }`
-        }
-      >
-        <Inbox />
-        {width > 1000 && <span>Dashboard</span>}
-      </NavLink>
-      <NavLink
-        to="/profile"
-        className={({ isActive }) =>
-          `{${width > 800 ? 'w-full' : 'w-fit'} h-12 rounded-xl flex items-center px-4 gap-x-4 ${
-            isActive && "bg-amber-300"
-          }`
-        }
-      >
-        <User />
-        {width > 1000 && <span>Profil</span>}
-      </NavLink>
-      <NavLink
-        to="/transactions"
-        className={({ isActive }) =>
-          `{${width > 800 ? 'w-full' : 'w-fit'} h-12 rounded-xl flex items-center px-4 gap-x-4 ${
-            isActive && "bg-amber-300"
-          }`
-        }
-      >
-        <Wallet />
-        {width > 1000 && <span>Transactions</span>}
-      </NavLink>
-      <NavLink
-        to="/statistiques"
-        className={({ isActive }) =>
-          `{${width > 800 ? 'w-full' : 'w-fit'} h-12 rounded-xl flex items-center px-4 gap-x-4 ${
-            isActive && "bg-amber-300"
-          }`
-        }
-      >
-        <ChartPie />
-        {width > 1000 && <span>Statistiques</span>}
-      </NavLink>
-      <NavLink
-        to="/logout"
-        className={({ isActive }) =>
-          `{${width > 800 ? 'w-full' : 'w-fit'} h-12 rounded-xl flex items-center px-4 gap-x-4 ${
-            isActive && "bg-amber-300"
-          } mt-auto`
-        }
-      >
-        <LogOut />
-        {width > 1000 && <span>Déconnexion</span>}
-      </NavLink>
-    </div>
+      <dialog id="logout_modal" className="modal" ref={modalRef}>
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Confirmation</h3>
+          <p className="py-4">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Annuler</button>
+            </form>
+
+            <Link to='/auth/logout' className="btn btn-primary">
+              Confirmer
+            </Link>
+          </div>
+        </div>
+      </dialog>
+    </>
   );
 }

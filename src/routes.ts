@@ -8,12 +8,13 @@ import Profile from "./pages/profile";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
-import { dashboardDataLoader } from "./lib/loaders";
+import { dashboardDataLoader, logout } from "./lib/loaders";
 import {
   forgottenPasswordAction,
   loginAction,
   registerAction,
 } from "./lib/actions";
+import ErrorBoundary from "./pages/ErrorBoundary";
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
@@ -24,7 +25,7 @@ function authMiddleware() {
   if (dateActuel - dateToken > 3600000) {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_token_creation_time");
-    throw redirect("/auth/login");
+    redirect("/auth/login");
   }
 }
 
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     middleware: [authMiddleware],
+    ErrorBoundary: ErrorBoundary,
     children: [
       {
         index: true,
@@ -48,28 +50,40 @@ export const router = createBrowserRouter([
         Component: TransactionPage,
       },
       {
-        path: "/profile",
+        path: "profile",
         Component: Profile,
       },
-
       {
-        path: "/reports",
+        path: "reports",
         Component: Reports,
+      },
+      {
+        path: "transactions",
+        Component: TransactionPage,
+      },
+      {
+        path: "profil",
+        Component: Profile,
       },
     ],
   },
   {
     path: "auth",
+    ErrorBoundary: ErrorBoundary,
     children: [
       {
         path: "login",
         Component: ConnexionPage,
-        action: loginAction
+        action: loginAction,
+      },
+      {
+        path: "logout",
+        loader: logout,
       },
       {
         path: "register",
         Component: RegisterPage,
-        action: registerAction
+        action: registerAction,
       },
       {
         path: "password_reset",
@@ -79,15 +93,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/transactions",
-    Component: TransactionPage,
-  },
-  {
-    path: "/profil",
-    Component: Profile,
-  },
-  {
-    path: "/*",
+    path: "*",
     Component: NotFoundPage,
   },
 ]);

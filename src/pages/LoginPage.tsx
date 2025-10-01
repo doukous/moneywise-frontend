@@ -1,9 +1,6 @@
 import { Form, Link } from "react-router";
-// import { useActionData } from "react-router";
 
 export default function ConnexionPage() {
-  // const actionData = useActionData();
-
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-76 flex flex-col items-center justify-center gap-y-12">
@@ -37,11 +34,7 @@ export default function ConnexionPage() {
           <button type="submit" className="w-full btn btn-accent">
             Se connecter
           </button>
-        </Form>
-        <span className="divider">ou</span>
-        <button type="button" className="w-76 btn btn-primary">
-          Continuer avec Google
-        </button>
+        </Form>  
         <Link to="/auth/password_reset" className="text-cyan-700">
           Mot de passe oublié ?
         </Link>

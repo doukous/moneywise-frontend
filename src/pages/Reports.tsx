@@ -4,6 +4,7 @@ import { TransactionService } from "../lib/service/transaction";
 import type { Transaction } from "../lib/service/dto"; // ✅ Typage venant du dto
 import { jsPDF } from "jspdf";
 import * as XLSX from "xlsx";
+import SideBar from "../components/SideBar";
 
 const Reports: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -38,7 +39,7 @@ const Reports: React.FC = () => {
         });
       })
       .catch((err) =>
-        console.error("Erreur lors du chargement des transactions :", err),
+        console.error("Erreur lors du chargement des transactions :", err)
       );
   }, []);
 
@@ -51,7 +52,7 @@ const Reports: React.FC = () => {
       doc.text(
         `${t.date} - ${t.category} - ${t.type} - ${t.amount} CFA`,
         20,
-        y,
+        y
       );
       y += 10;
     });
@@ -70,46 +71,53 @@ const Reports: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Rapports Financiers</h1>
-      <p className="text-gray-600">Exportez vos transactions en PDF ou Excel</p>
+    <div className="w-full h-full flex">
+      <SideBar />
+      <div className="flex-1 p-6 space-y-6">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Rapports Financiers
+        </h1>
+        <p className="text-gray-600">
+          Exportez vos transactions en PDF ou Excel
+        </p>
 
-      {/* Résumé */}
-      <div className="bg-white shadow rounded-lg p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="text-center">
-          <div className="text-lg font-bold text-green-600">
-            {monthlyReport.income} CFA
+        {/* Résumé */}
+        <div className="bg-white shadow rounded-lg p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center">
+            <div className="text-lg font-bold text-green-600">
+              {monthlyReport.income} CFA
+            </div>
+            <div className="text-sm text-gray-500">Revenus</div>
           </div>
-          <div className="text-sm text-gray-500">Revenus</div>
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-bold text-red-600">
-            {monthlyReport.expense} CFA
+          <div className="text-center">
+            <div className="text-lg font-bold text-red-600">
+              {monthlyReport.expense} CFA
+            </div>
+            <div className="text-sm text-gray-500">Dépenses</div>
           </div>
-          <div className="text-sm text-gray-500">Dépenses</div>
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-bold text-blue-600">
-            {monthlyReport.balance} CFA
+          <div className="text-center">
+            <div className="text-lg font-bold text-blue-600">
+              {monthlyReport.balance} CFA
+            </div>
+            <div className="text-sm text-gray-500">Solde</div>
           </div>
-          <div className="text-sm text-gray-500">Solde</div>
         </div>
-      </div>
 
-      {/* Boutons Export */}
-      <div className="flex space-x-4">
-        <button
-          onClick={exportPDF}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        >
-          Exporter en PDF
-        </button>
-        <button
-          onClick={exportExcel}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-        >
-          Exporter en Excel
-        </button>
+        {/* Boutons Export */}
+        <div className="flex space-x-4">
+          <button
+            onClick={exportPDF}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+          >
+            Exporter en PDF
+          </button>
+          <button
+            onClick={exportExcel}
+            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          >
+            Exporter en Excel
+          </button>
+        </div>
       </div>
     </div>
   );

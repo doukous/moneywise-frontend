@@ -1,4 +1,4 @@
-import type { Transaction } from "./dto";
+import type { Transaction, TransactionList } from "./dto";
 //import type { LoginResponse } from "./dto";
 import { BackService } from "../backendFetch.js";
 
@@ -13,7 +13,6 @@ export class TransactionService {
         Authorization: `Bearer ${this.token}`,
       },
     });
-    console.log(response);
     if (!response.ok) {
       return response.statusText;
     }
@@ -48,15 +47,11 @@ export class TransactionService {
     return response.json();
   }
 
-  static async getAll() {
-    const response = await BackService.get(this.endpoint, {
+  static async getAll(): Promise<TransactionList> {
+    return BackService.get(this.endpoint, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
     });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch transactions: ${response.statusText}`);
-    }
-    return response.json() as Transaction[];
   }
 }
