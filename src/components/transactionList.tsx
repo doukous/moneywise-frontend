@@ -15,10 +15,10 @@ export function TransactionList({
     id: 0,
     name: "",
     amount: 0,
-    user_id: 0,
+    // user_id: 0,
     date: "",
     category: null,
-    type: "",
+    type: "expense",
   });
 
   const editTransaction = (transedit: Transaction) => {
@@ -32,7 +32,7 @@ export function TransactionList({
       id: 0,
       name: "",
       amount: 0,
-      user_id: 0,
+      // user_id: 0,
       date: "",
       category: null,
       type: "expense",

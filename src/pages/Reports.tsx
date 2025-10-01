@@ -1,14 +1,14 @@
 // src/components/Reports.tsx
-import React, { useEffect, useState } from "react";
-import { TransactionService } from "../lib/service/transaction";
+import React, { useState } from "react";
+// import { TransactionService } from "../lib/service/transaction";
 import type { Transaction } from "../lib/service/dto"; // ✅ Typage venant du dto
 import { jsPDF } from "jspdf";
 import * as XLSX from "xlsx";
 import SideBar from "../components/SideBar";
 
 const Reports: React.FC = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [monthlyReport, setMonthlyReport] = useState<{
+  const [transactions] = useState<Transaction[]>([]);
+  const [monthlyReport] = useState<{
     income: number;
     expense: number;
     balance: number;
@@ -19,29 +19,29 @@ const Reports: React.FC = () => {
   });
 
   // Charger les transactions depuis le backend
-  useEffect(() => {
-    TransactionService.getAll()
-      .then((data) => {
-        setTransactions(data);
+  // useEffect(() => {
+  //   TransactionService.getAll()
+  //     .then((data) => {
+  //       setTransactions(data);
 
-        // Calcul rapide du rapport
-        const income = data
-          .filter((t: Transaction) => t.type === "income")
-          .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
-        const expense = data
-          .filter((t: Transaction) => t.type === "expense")
-          .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
+  //       // Calcul rapide du rapport
+  //       const income = data
+  //         .filter((t: Transaction) => t.type === "income")
+  //         .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
+  //       const expense = data
+  //         .filter((t: Transaction) => t.type === "expense")
+  //         .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
 
-        setMonthlyReport({
-          income,
-          expense,
-          balance: income - expense,
-        });
-      })
-      .catch((err) =>
-        console.error("Erreur lors du chargement des transactions :", err)
-      );
-  }, []);
+  //       setMonthlyReport({
+  //         income,
+  //         expense,
+  //         balance: income - expense,
+  //       });
+  //     })
+  //     .catch((err) =>
+  //       console.error("Erreur lors du chargement des transactions :", err)
+  //     );
+  // }, []);
 
   // Export PDF
   const exportPDF = () => {
