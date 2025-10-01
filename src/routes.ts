@@ -1,5 +1,5 @@
 import { createBrowserRouter, redirect } from "react-router";
-import { TransactionPage } from "./pages/transactionPage";
+// import { TransactionPage } from "./pages/transactionPage";
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
       {
         path: "transactions",
         loader: dashboardDataLoader,
-        Component: TransactionPage,
+        // Component: TransactionPage,
       },
       {
         path: "profile",
@@ -56,14 +56,6 @@ export const router = createBrowserRouter([
       {
         path: "reports",
         Component: Reports,
-      },
-      {
-        path: "transactions",
-        Component: TransactionPage,
-      },
-      {
-        path: "profil",
-        Component: Profile,
       },
     ],
   },

@@ -85,7 +85,7 @@ export function TransactionForm({
               </label>
               <input
                 id="name"
-                value={trans.name}
+                // value={trans.name}
                 onChange={(e) => setTrans({ ...trans, name: e.target.value })}
                 type="text"
                 className="input input-bordered w-full"
@@ -119,7 +119,7 @@ export function TransactionForm({
               <select
                 id="type"
                 value={trans.type || "expense"}
-                onChange={(e) => setTrans({ ...trans, type: e.target.value })}
+                // onChange={(e) => setTrans({ ...trans, type: e.target.value })}
                 className="select select-bordered w-full"
                 aria-label="Type de transaction"
               >
