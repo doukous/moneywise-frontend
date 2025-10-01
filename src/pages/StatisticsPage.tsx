@@ -1,25 +1,30 @@
 import SideBar from "../components/SideBar";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Filler, CategoryScale, LinearScale, PointElement, LineElement } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+} from "chart.js";
 import { Pie, Line } from "react-chartjs-2";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
   Filler,
-  ArcElement, 
-  Tooltip, 
+  ArcElement,
+  Tooltip,
   Legend
 );
 
 const dataDepenses = {
-  labels: [
-    "Salaire",
-    "Services",
-    "Freelancing",
-    "Cadeau / Dons",
-  ],
+  labels: ["Salaire", "Services", "Freelancing", "Cadeau / Dons"],
   datasets: [
     {
       label: "Somme totale",
@@ -75,20 +80,30 @@ const dataRevenus = {
   ],
 };
 
-const labels = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Julliet', 'Aout', 'Septembre'];
+const labels = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Julliet",
+  "Aout",
+  "Septembre",
+];
 
 const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: "top" as const,
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: "Chart.js Line Chart",
     },
   },
-  tension: 0.3
+  tension: 0.3,
 };
 
 const data = {
@@ -96,43 +111,50 @@ const data = {
   datasets: [
     {
       fill: true,
-      label: 'Revenu mensuel',
-      data: labels.map(() => faker.number.int({ min: 300000, max: 500000, multipleOf: 500 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      label: "Revenu mensuel",
+      data: labels.map(() =>
+        faker.number.int({ min: 300000, max: 500000, multipleOf: 500 })
+      ),
+      borderColor: "rgb(53, 162, 235)",
+      backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
     {
       fill: true,
-      label: 'Dépense mensuelle',
-      data: labels.map(() => faker.number.int({ min: 200000, max: 600000, multipleOf: 500 })),
-      borderColor: 'rgb(140, 250, 214)',
-      backgroundColor: 'rgba(140, 250, 214, 0.5)',
+      label: "Dépense mensuelle",
+      data: labels.map(() =>
+        faker.number.int({ min: 200000, max: 600000, multipleOf: 500 })
+      ),
+      borderColor: "rgb(140, 250, 214)",
+      backgroundColor: "rgba(140, 250, 214, 0.5)",
     },
   ],
 };
 
 export default function StatisticsPage() {
   return (
-    <div className="flex w-full h-screen overflow-hidden">
+    <div className="w-full h-full flex">
       <SideBar />
-      <div className="flex-1 h-screen flex flex-wrap items-center gap-y-8 overflow-y-auto">
-        <div className="w-1/2 flex flex-col items-center gap-y-4">
-          <div className="size-72">
-            <Pie data={dataDepenses} />
+      <div className="w-full h-screen pb-24 overflow-y-scroll">
+        <h1 className="p-8 font-bold text-3xl">Statistiques</h1>
+        <div className="flex justify-center flex-wrap gap-4">
+          <div className="flex flex-col items-center gap-y-4 p-4 border-1 border-gray-300 rounded-2xl">
+            <h2 className="text-2xl font-bold">Répartiton par catégorie des revenus</h2>
+            <div className="size-72">
+              <Pie data={dataDepenses} />
+            </div>
           </div>
-          <span>Répartiton par catégorie des revenus</span>
-        </div>
-        <div className="w-1/2 flex flex-col items-center gap-y-4">
-          <div className="size-72">
-            <Pie data={dataRevenus} />
+          <div className="flex flex-col items-center gap-y-4 p-4 border-1 border-gray-300 rounded-2xl">
+            <h2 className="text-2xl font-bold">Répartiton par catégorie des dépenes</h2>
+            <div className="size-72">
+              <Pie data={dataRevenus} />
+            </div>
           </div>
-          <span>Répartiton par catégorie des dépenes</span>
-        </div>
-        <div className="w-1/2 flex flex-col items-center gap-y-2">
-          <div className="w-128 h-64">
-            <Line options={options} data={data} />
+          <div className="flex flex-col items-center gap-y-2 p-4 border-1 border-gray-300 rounded-2xl">
+            <h2 className="text-2xl font-bold">Répartiton des transactions sur l'année</h2>
+            <div className="w-96">
+              <Line options={options} data={data} />
+            </div>
           </div>
-          <span>Répartiton des transactions sur l'année</span>
         </div>
       </div>
     </div>

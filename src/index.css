@@ -82,3 +82,8 @@
   --depth: 1;
   --noise: 1;
 }
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}

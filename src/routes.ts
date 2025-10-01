@@ -1,4 +1,5 @@
 import { createBrowserRouter, redirect } from "react-router";
+<<<<<<< HEAD
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
@@ -19,6 +20,23 @@ import type {
   TransActionList,
   Category,
 } from "./lib/service/dto";
+=======
+import { TransactionPage } from "./pages/transactionPage";
+import ConnexionPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/404";
+import Profile from "./pages/profile";
+import Reports from "./pages/Reports";
+import StatisticsPage from "./pages/StatisticsPage";
+import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+import { dashboardDataLoader } from "./lib/loaders";
+import {
+  forgottenPasswordAction,
+  loginAction,
+  registerAction,
+} from "./lib/actions";
+>>>>>>> ba2b695 (merge branches)
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
@@ -33,6 +51,7 @@ function authMiddleware() {
   }
 }
 
+<<<<<<< HEAD
 async function dashboardDataLoader() {
   const token = localStorage.getItem("auth_token");
   const user = await BackService.get("/me", {
@@ -50,6 +69,8 @@ async function dashboardDataLoader() {
   return { user: user, transactions: transactions, categories: categories };
 }
 
+=======
+>>>>>>> ba2b695 (merge branches)
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -90,6 +111,7 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: ConnexionPage,
+<<<<<<< HEAD
         action: async ({ request }) => {
           const data = await request.formData();
 
@@ -116,10 +138,14 @@ export const router = createBrowserRouter([
 
           return { response: JSON.stringify(response) };
         },
+=======
+        action: loginAction,
+>>>>>>> ba2b695 (merge branches)
       },
       {
         path: "register",
         Component: RegisterPage,
+<<<<<<< HEAD
         action: async ({ request }) => {
           const data = await request.formData();
 
@@ -134,10 +160,14 @@ export const router = createBrowserRouter([
 
           return { response: JSON.stringify(response) };
         },
+=======
+        action: registerAction,
+>>>>>>> ba2b695 (merge branches)
       },
       {
         path: "password_reset",
         Component: ForgottenPasswordPage,
+        action: forgottenPasswordAction,
       },
     ],
   },

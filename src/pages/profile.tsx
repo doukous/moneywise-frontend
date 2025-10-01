@@ -1,6 +1,14 @@
 import React, { useState, useEffect, type FormEvent } from "react";
-import { Edit, Save, X, Upload } from "lucide-react";
-import { getUserProfile, updateUserProfile, type User } from "../services/auth";
+import { Edit, Save, X } from "lucide-react";
+import {
+  getUserProfile,
+  updateUserProfile,
+  getUserStats,
+  type User,
+  type Stats,
+} from "../services/auth";
+import LogoutButton from "../components/LogoutButton"; // ✅ Import du bouton
+import SideBar from "../components/SideBar";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -107,8 +115,10 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header avec photo + nom utilisateur */}
+    <div className="w-full h-screen flex">
+      <SideBar />
+    
+    <div className="flex-1 p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
@@ -345,6 +355,7 @@ const Profile: React.FC = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

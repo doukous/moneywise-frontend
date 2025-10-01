@@ -1,19 +1,9 @@
-import { useRef, useState } from "react";
 import { Form, Link, useActionData } from "react-router";
+import { usePasswordConformityCheck } from "../lib/hooks";
 
 export default function RegisterPage() {
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const confirmationPasswordRef = useRef<HTMLInputElement | null>(null);
-  const [samePasswords, setSamePasswords] = useState(true);
+  const { passwordRef, confirmationPasswordRef, samePasswords, checkPasswordsConformity }= usePasswordConformityCheck()  
   const actionData = useActionData();
-
-  function checkPasswordsConformity() {
-    if (passwordRef.current?.value !== confirmationPasswordRef.current?.value) {
-      setSamePasswords(false);
-    } else {
-      setSamePasswords(true);
-    }
-  }
 
   return (
     <div className="w-full h-screen flex justify-center">
@@ -46,33 +36,34 @@ export default function RegisterPage() {
               title="Le mail doit etre de la forme user@example.com>"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-76">
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
               name="password"
               id="password"
-              className="w-76 input"
+              className="w-full input"
               required
               minLength={6}
               ref={passwordRef}
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-76">
             <label htmlFor="confirmation-password">
               Confirmation du mot de passe
             </label>
             <input
               type="password"
               id="confirmation-password"
-              className={`w-76 input ${!samePasswords && "input-error"}`}
+              name="confirmation-password"
+              className={`input ${!samePasswords && "input-error"}`}
               required
-              minLength={8}
+              minLength={6}
               ref={confirmationPasswordRef}
               onBlur={checkPasswordsConformity}
             />
             {!samePasswords && (
-              <span className="text-error w-full">
+              <span className="text-error">
                 Les deux mots de passe doivent etre identiques
               </span>
             )}
@@ -82,9 +73,6 @@ export default function RegisterPage() {
           </button>
         </Form>
         <span className="divider my-0">ou</span>
-        <button type="button" className="w-76 btn btn-primary">
-          Continuer avec Google
-        </button>
         <span>
           Vous avez déjà un compte ?{" "}
           <Link to="/auth/login" className="text-cyan-700">
