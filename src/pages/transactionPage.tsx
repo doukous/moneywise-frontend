@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
 import type {
   Transaction,
   TransActionList,
@@ -61,47 +61,47 @@ export function TransactionPage() {
     setTransactionList(list);
   };
 
+  const initials = (user?.name ?? "").split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() || "U";
+
   return (
-    <div className="w-full h-screen bg-base-100 flex">
+    <div className="w-full min-h-screen bg-base-100 flex flex-col sm:flex-row">
       <SideBar />
-      <div className="flex-1 flex flex-col items-center justify-start gap-y-4">
+      <div className="flex-1 flex flex-col items-center justify-start gap-y-4 p-4">
         {/* header */}
         <div className="w-full max-w-6xl px-4">
           <div className="w-full flex items-center justify-between py-6">
             <h1 className="text-2xl font-bold">Transactions</h1>
             <div className="flex items-center gap-x-2" id="avatar">
-              <div className="font-semibold">{user?.name}</div>
-              <div className="w-10 h-10 rounded-full overflow-hidden">
-                <img src={`${user?.profile_image && ""}`} alt="profile pic" />
+              <div className="hidden sm:block font-semibold">{user?.name}</div>
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-base-200 flex items-center justify-center">
+                {user?.profile_image ? (
+                  <img src={String(user.profile_image)} alt="profile image" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="font-bold text-sm">{initials}</span>
+                )}
               </div>
             </div>
           </div>
 
           {/* searchbar */}
           <div className="flex gap-x-4 w-full mb-4">
-            <div className="bg-base-200 p-4 rounded-lg flex gap-2 items-center w-full">
-              <Form
-                className="flex items-center gap-2 flex-1"
-                method="get"
-                action="/transactions"
-              >
+            <div className="bg-base-200 p-4 rounded-lg flex gap-2 items-center w-full flex-col sm:flex-row">
+              <form className="flex items-center gap-2 flex-1 w-full" onSubmit={(e) => e.preventDefault()}>
                 <label className="sr-only" htmlFor="search">
                   Recherche
                 </label>
                 <input
                   type="text"
                   onChange={handleSearch}
-                  className="input input-bordered input-xs sm:input-sm w-full max-w-xs"
+                  className="input input-bordered input-sm w-full max-w-full sm:max-w-xs"
                   name="search-input"
                   id="search"
                   placeholder="Recherche une transaction"
                 />
-                <input
-                  type="submit"
-                  className="btn btn-accent btn-xs"
-                  value="Rechercher"
-                />
-              </Form>
+                <button type="button" className="btn btn-accent btn-sm" onClick={() => { /* noop: search is handled onChange */ }}>
+                  Rechercher
+                </button>
+              </form>
 
               <label className="sr-only" htmlFor="font-filter">
                 Filter
@@ -124,7 +124,7 @@ export function TransactionPage() {
         </div>
 
         {/* transaction list */}
-        <div className="w-full flex-1 px-4 overflow-y-auto max-w-6xl">
+        <div className="w-full flex-1 px-4 overflow-x-auto max-w-6xl">
           <TransactionList tlist={transactionList} cate={categories} />
         </div>
       </div>
