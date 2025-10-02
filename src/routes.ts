@@ -1,10 +1,10 @@
 import { createBrowserRouter, redirect } from "react-router";
-// import { TransactionPage } from "./pages/transactionPage";
+import { TransactionPage } from "./pages/transactionPage";
 import ConnexionPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/404";
-import Profile from "./pages/profile";
+import Profile from "./pages/ProfilePage";
 import Reports from "./pages/Reports";
 import StatisticsPage from "./pages/StatisticsPage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
@@ -18,6 +18,7 @@ import ErrorBoundary from "./pages/ErrorBoundary";
 
 function authMiddleware() {
   const token = localStorage.getItem("auth_token");
+  console.log(token);
   if (!token) throw redirect("/auth/login");
 
   const dateActuel = Date.now();
@@ -47,7 +48,7 @@ export const router = createBrowserRouter([
       {
         path: "transactions",
         loader: dashboardDataLoader,
-        // Component: TransactionPage,
+        Component: TransactionPage,
       },
       {
         path: "profile",

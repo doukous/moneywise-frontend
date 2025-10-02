@@ -40,18 +40,19 @@ export interface LoginResponse {
 }
 
 export interface Transaction {
-  id: string | number;
+  id: number | null;
   // name or description may be used
-  name?: string | null;
+  title: string | null;
   amount: number;
   // category can be number id, string name, array or null depending on API
-  category: number | string | Array<number | string> | null;
-  description?: string;
+  category_name: string;
+  category: Category;
+  description: string;
   type: "income" | "expense";
   date: string; // exemple: "2023-05-25 14:20"
 }
 
-export interface TransactionList {
+export interface TransActionList {
   success: boolean;
   count: number;
   transactions: Transaction[];
@@ -64,48 +65,48 @@ export interface Category {
 }
 
 export interface Budget {
-  id: string
-  category: Category
-  amount: number
-  period: 'monthly' | 'yearly' | 'none'
+  id: string;
+  category: Category;
+  amount: number;
+  period: "monthly" | "yearly" | "none";
 }
 
 export interface pdfReport {
-  transactions: Transaction[]
-  budget: number
-  totalIncome: number
-  totalExpense: number
-  netBalance: number
-  startDate: string
-  endDate: string
+  transactions: Transaction[];
+  budget: number;
+  totalIncome: number;
+  totalExpense: number;
+  netBalance: number;
+  startDate: string;
+  endDate: string;
 }
 
 export interface CategoryStats {
-    [categoryName: string]: { income: number; expense: number; };
+  [categoryName: string]: { income: number; expense: number };
 }
 
 export interface MonthlyStats {
-    [month: string]: { income: number; expense: number; };
+  [month: string]: { income: number; expense: number };
 }
 
 export interface SummaryStats {
-    total_income: number;
-    total_expense: number;
-    balance: number;
-    budget: number;
+  total_income: number;
+  total_expense: number;
+  balance: number;
+  budget: number;
 }
 
 export interface CategoryStatsResponse {
-    success: boolean;
-    stats_by_category: CategoryStats;
+  success: boolean;
+  stats_by_category: CategoryStats;
 }
 
 export interface MonthlyStatsResponse {
-    success: boolean;
-    stats_by_month: MonthlyStats;
+  success: boolean;
+  stats_by_month: MonthlyStats;
 }
 
 export interface SummaryStatsResponse {
-    success: boolean;
-    summary: SummaryStats;
+  success: boolean;
+  summary: SummaryStats;
 }

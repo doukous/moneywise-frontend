@@ -33,7 +33,7 @@ export default function SideBar() {
           <Inbox />
           <span className="hidden lg:inline">Dashboard</span>
         </NavLink>
-        <NavLink to="/profil" className={getNavLinkClass}>
+        <NavLink to="/profile" className={getNavLinkClass}>
           <User />
           <span className="hidden lg:inline">Profil</span>
         </NavLink>

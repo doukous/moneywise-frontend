@@ -25,8 +25,8 @@ export class BackService {
     return response.json();
   }
 
-  static get(endpoint: string, options: RequestInit = {}) {
-    return this.fetch(endpoint, {
+  static async get(endpoint: string, options: RequestInit = {}) {
+    return await this.fetch(endpoint, {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -37,8 +37,8 @@ export class BackService {
     });
   }
 
-  static post<T>(endpoint: string, body: T, options: RequestInit = {}) {
-    return this.fetch(endpoint, {
+  static async post<T>(endpoint: string, body: T, options: RequestInit = {}) {
+    return await this.fetch(endpoint, {
       ...options,
       headers: {
         "Content-Type": "application/json",

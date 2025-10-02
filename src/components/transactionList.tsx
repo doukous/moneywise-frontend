@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Transaction, Category } from "../lib/service/dto";
 import TransactionForm from "./TransactionForm";
+import { TransactionService } from "../lib/service/transaction";
 
 export function TransactionList({
   tlist,
@@ -12,29 +13,25 @@ export function TransactionList({
   const [modal, setModal] = useState(false);
   const [down, setDown] = useState(false);
   const [trans, setTrans] = useState<Transaction>({
-    id: 0,
-    name: "",
+    id: null,
+    title: "",
     amount: 0,
-    // user_id: 0,
     date: "",
-    category: null,
+    category_name: "",
+    description: "",
+    category: {id: 0, name: "", type: "expense"},
     type: "expense",
   });
-
-  const editTransaction = (transedit: Transaction) => {
-    // prepare form for editing (currently just logs)
-    console.log("editTransaction", transedit);
-    setTrans(transedit);
-    setModal(true);
-  };
+  console.log({tlist, cate});
   const handleAdd = () => {
     setTrans({
-      id: 0,
-      name: "",
+      id: null,
+      title: "",
       amount: 0,
-      // user_id: 0,
       date: "",
-      category: null,
+      category_name: "",
+      description: "",
+      category: {id: 0, name: "", type: "expense"},
       type: "expense",
     });
     setModal(true);
@@ -75,7 +72,7 @@ export function TransactionList({
           {tlist.map((transaction) => (
             <tr key={transaction.id}>
               <th>{transaction.id}</th>
-              <td>{transaction.name}</td>
+              <td>{transaction.title}</td>
               <td>{transaction.amount}</td>
               <td>
                 {transaction.type === "expense" ? (
@@ -86,28 +83,32 @@ export function TransactionList({
               </td>
               <td>{transaction.date}</td>
               <td>
-                {cate.find((c) => c.id === transaction.category)?.name ?? ""}
+                {transaction.category.name}
               </td>
-              <td>
+              <td className="flex gap-2 text-center justify-center items-center">
                 <button
-                  aria-label="edit"
-                  onClick={() => editTransaction(transaction)}
-                  className="btn btn-accent btn-soft btn-sm"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
+                  onClick={() => {
+                    setTrans(transaction);
+                    setModal(true);
+                  }}
+                  className="btn btn-info btn-sm"
+                  aria-label="edit">
+                    modifier
+                </button>
+                <button
+                  //delete
+                  onClick={async () => {
+                    if (transaction.id !== null) {
+                      if (window.confirm("Are you sure you want to delete this transaction?")) {
+                        const res =await TransactionService.delete(transaction.id);
+                        console.log({res});
+                        window.location.reload();
+                      }
+                    }
+                  }}
+                  className="btn btn-warning btn-sm"
+                  aria-label="delete">
+                    supprimer
                 </button>
               </td>
             </tr>

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import type { Transaction } from "../lib/service/dto";
-import { BackService } from "../lib/backendFetch";
+import { TransactionService } from "../lib/service/transaction";
 
 type Category = { id: number; name: string; type: string };
 
@@ -21,35 +20,29 @@ export function TransactionForm({
   setDown,
   onClose,
 }: Props) {
-  const [newcate, setNewCate] = useState<Category>({
-    id: 0,
-    name: "",
-    type: "expense",
-  });
-  const newCate = (e: React.FormEvent | React.MouseEvent) => {
-    e.preventDefault();
-    // comportement existant : ajouter localement au tableau cate (parent devrait persister)
-    if (newcate && newcate.name.trim() !== "") {
-      cate.push({ id: 0, name: newcate.name.trim(), type: "expense" });
-      setNewCate({ id: 0, name: "", type: "expense" });
-    }
 
-    // post sur le serveur
-    BackService.post<Category>("/categories", newcate)
-      .then((response) => {
-        cate.push(response.data);
-        setNewCate({ id: 0, name: "", type: "expense" });
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la création de la catégorie :", error);
-      });
-  };
+  //const handleCategory = (c: Category) => {
+  //  setTrans({ ...trans, category_name: c.name });
+  //  console.log(c.name, trans);
+  //};
 
-  const saveTransaction = () => {
+  const saveTransaction = async () => {
     // The app persists transactions elsewhere. Keep existing behavior: reset id and close.
-    trans.id = 0;
-    setTrans(trans);
-    onClose();
+    console.log(trans);
+    if (trans.id) {
+      // update
+      const res = await TransactionService.update(trans);
+      if (res.success){
+        //recharger la page
+        window.location.reload();
+      }
+      return;
+    }
+    const res = await TransactionService.create(trans);
+    if (res.success){
+      //recharger la page
+      window.location.reload();
+    }
   };
 
   return (
@@ -72,10 +65,7 @@ export function TransactionForm({
         {/* Body / Form */}
         <form
           className="p-4 sm:p-6 space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            saveTransaction();
-          }}
+          onSubmit={(e) => e.preventDefault()}
         >
           {/* Row 1: name / amount */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -85,8 +75,8 @@ export function TransactionForm({
               </label>
               <input
                 id="name"
-                // value={trans.name}
-                onChange={(e) => setTrans({ ...trans, name: e.target.value })}
+                value={trans.title?? ""}
+                onChange={(e) => setTrans({ ...trans, title: e.target.value })}
                 type="text"
                 className="input input-bordered w-full"
                 placeholder="Nom de la transaction"
@@ -119,7 +109,7 @@ export function TransactionForm({
               <select
                 id="type"
                 value={trans.type || "expense"}
-                // onChange={(e) => setTrans({ ...trans, type: e.target.value })}
+                onChange={(e) => setTrans({ ...trans, type: e.target.value as "income" | "expense" })}
                 className="select select-bordered w-full"
                 aria-label="Type de transaction"
               >
@@ -134,78 +124,23 @@ export function TransactionForm({
               </label>
               {/*Categorie, show or add new*/}
               <div className="flex flex-col gap-2 w-full">
-                {trans.category !== null && trans.category !== undefined ? (
-                  <span
-                    key={String(trans.category)}
-                    onClick={() => setTrans({ ...trans, category: null })}
-                    className="badge badge-info badge-outline cursor-pointer"
-                  >
-                    {cate.find((c) => c.id === trans.category)?.name ??
-                      String(trans.category)}
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setDown(!down)}
-                    className="btn btn-outline mb-0.5"
-                  >
-                    + catégorie
-                  </button>
-                )}
-              </div>
-
-              {/* To add new category */}
-              {down === true ? (
-                <div className=" inset-0 w-80 h-full bg-base-100/60 flex items-center justify-center">
-                  <div className="w-full max-w-96 bg-base-100 p-4 rounded shadow border">
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        className="input input-bordered w-full"
-                        onChange={(e) =>
-                          setNewCate({ ...newcate, name: e.target.value })
-                        }
-                        value={newcate.name}
-                        placeholder="nouvelle catégorie"
-                      />
-                      <select
-                        id="type"
-                        value={newcate.type || "expense"}
-                        onChange={(e) =>
-                          setNewCate({ ...newcate, type: e.target.value })
-                        }
-                        className="select select-bordered w-full"
-                        aria-label="Type de transaction"
-                      >
-                        <option value="expense">Dépense</option>
-                        <option value="income">Revenu</option>
-                      </select>
+                <input type="text" value={trans.category_name ?? ""} className="input input-bordered w-full" onFocus={() => setDown(!down)} placeholder="Nouveau catégorie" onChange={(e) => setTrans({ ...trans, category_name: e.target.value })} />
+                {down === true && cate.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {cate.map((c) => (
                       <button
+                        aria-label="category"
                         type="button"
-                        onClick={(e) => newCate(e)}
-                        className="btn btn-accent btn-sm"
+                        className="btn btn-outline btn-sm"
+                        key={c.id}
+                        onClick={() => setTrans({ ...trans, category_name: c.name })}
                       >
-                        Ajouter
+                        {c.name}
                       </button>
-                    </div>
-
-                    <div className="p-2 flex flex-col gap-1">
-                      {cate.map((c) => (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setTrans({ ...trans, category: c.id });
-                            setDown(false);
-                          }}
-                          className="btn btn-accent btn-soft"
-                        >
-                          {c.name}
-                        </button>
-                      ))}
-                    </div>
+                    ))}
                   </div>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
             </div>
 
             <div className="form-control">
@@ -214,8 +149,9 @@ export function TransactionForm({
               </label>
               <input
                 id="date"
-                type="text"
+                type="date"
                 value={trans.date}
+                onChange={(e) => setTrans({ ...trans, date: e.target.value })}
                 className="input input-bordered w-full"
                 placeholder="exemple : 13/02/2022 22:45"
               />
@@ -224,8 +160,15 @@ export function TransactionForm({
 
           {/* Actions */}
           <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
-            <button type="submit" className="btn btn-info">
-              Sauvegarder
+            <button
+              type="button"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                void saveTransaction();
+              }}
+              className="btn btn-info"
+            >
+              {trans.id !== null ? "Modifier" : "Ajouter"}
             </button>
             <button
               type="button"

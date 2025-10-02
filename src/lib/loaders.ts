@@ -1,5 +1,5 @@
 import { BackService } from "./backendFetch";
-import type { TransactionList } from "./service/dto";
+import type { TransActionList } from "./service/dto";
 
 export async function dashboardDataLoader() {
   const token = localStorage.getItem("auth_token");
@@ -7,15 +7,19 @@ export async function dashboardDataLoader() {
     headers: { authorization: `Bearer ${token}` },
   });
 
-  const transactions: TransactionList = await BackService.get(
+  const transactions: TransActionList = await BackService.get(
     "/transactions",
     {
       headers: { authorization: `Bearer ${token}` },
     }
   );
-
-  return { user: user.user, transactions: transactions };
+  const categories = await BackService.get("/categories", {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  console.log({transactions, categories});
+  return { user: user.user, transactions: transactions, categories: categories.categories };
 }
+
 
 export async function logout() {
   const token = localStorage.getItem("auth_token");
