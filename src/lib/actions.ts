@@ -36,7 +36,7 @@ export async function registerAction({ request }: { request: Request }) {
   };
 
   const response = await BackService.post("/register", requestBody);
-  if (response) return redirect("auth/login");
+  if (response) return redirect("/auth/login");
 
   return { response: JSON.stringify(response) };
 }
