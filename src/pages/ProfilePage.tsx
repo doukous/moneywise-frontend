@@ -167,11 +167,11 @@ const Profile: React.FC = () => {
                     <input
                       type={type}
                       className="input input-bordered w-full"
-                      value={(formData as any)[key]}
+                      value={(formData as never)[key]}
                       onChange={(e) => setFormData((prev) => ({ ...prev, [key]: e.target.value }))}
                     />
                   ) : (
-                    <div className="bg-base-300 p-3 rounded">{(user as any)[key]}</div>
+                    <div className="bg-base-300 p-3 rounded">{(user as never)[key]}</div>
                   )}
                 </div>
               ))}
