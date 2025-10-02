@@ -167,12 +167,10 @@ const Profile: React.FC = () => {
                     <input
                       type={type}
                       className="input input-bordered w-full"
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       value={(formData as any)[key]}
                       onChange={(e) => setFormData((prev) => ({ ...prev, [key]: e.target.value }))}
                     />
                   ) : (
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     <div className="bg-base-300 p-3 rounded">{(user as any)[key]}</div>
                   )}
                 </div>
