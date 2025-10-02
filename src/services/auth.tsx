@@ -13,13 +13,10 @@ export type LoginResponse = {
 
 export type User = {
   profileImage: string;
-  dateOfBirth: string;
-  mobileNumber: string;
-  lastName: string;
-  firstName: string;
   id: number;
   name: string;
   email: string;
+  profile_image: URL;
   created_at?: string;
   updated_at?: string;
 };
@@ -69,9 +66,17 @@ export async function getUserProfile(): Promise<User> {
 }
 
 // Mise à jour du profil utilisateur
-export async function updateUserProfile(formData: Partial<User>): Promise<User> {
-  const res: AxiosResponse<User> = await axios.put(`${API_URL}/update-profile`, formData, {
-    headers: getAuthHeaders(),
-  });
-  return res.data;
+export async function updateUserProfile(formData: FormData): Promise<User> {
+  const res: AxiosResponse<{ success: boolean; user: User }> = await axios.post(
+    `${API_URL}/update-profile`,
+    formData,
+    {
+      headers: {
+        ...getAuthHeaders(),
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return res.data.user;
 }
+
