@@ -1,6 +1,6 @@
 # MoneyWise - Front-End
 
-Repo du Frontend de l'application Front-End
+Repo du Frontend de l'application MoneyWise
 
 ## Stack
 
@@ -8,6 +8,10 @@ Repo du Frontend de l'application Front-End
 2. React
 3. React Router
 4. Tailwind CSS
+5. Daisy UI
+6. jsPdf
+7. Chart JS
+8. xlsx
 
 ## Deploiement
 
