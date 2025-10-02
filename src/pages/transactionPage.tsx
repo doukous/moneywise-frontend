@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Ajout de useEffect
 import { useLoaderData } from "react-router";
 import type {
   Transaction,
@@ -21,6 +21,14 @@ export function TransactionPage() {
     transactions?.transactions || [],
   );
   const [row, setRow] = useState("Nom");
+// ✅ Ajout pour enregistrer les données dans sessionStorage
+useEffect(() => {
+  if (transactionList && transactionList.length > 0) {
+    sessionStorage.setItem("transactions", JSON.stringify(transactionList));
+  }
+}, [transactionList]);
+
+
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -34,19 +42,13 @@ export function TransactionPage() {
         return name.includes(query);
       }
       if (row === "Categories") {
-        // category can be stored in several ways depending on the API:
-        // - a simple string in category_name
-        // - an object in category with a .name field
-        // - possibly other shapes (array / id) — normalize to string
         const catFromName = (t.category_name ?? "").toString();
         let cat = catFromName;
         try {
           if (!cat && t.category) {
-
             if (typeof t.category === "object" && t.category?.name) {
               cat = String(t.category.name);
             } else {
-              // fallback to a stringified form
               cat = String(t.category);
             }
           }
@@ -131,3 +133,4 @@ export function TransactionPage() {
     </div>
   );
 }
+
