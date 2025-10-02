@@ -133,6 +133,22 @@ export default function StatisticsPage() {
     };
   }, [transactions, selectedYear]);
 
+  const totalsForYear = useMemo(() => {
+    let income = 0;
+    let expense = 0;
+    transactions.forEach((t) => {
+      const d = new Date(t.date);
+      if (d.getFullYear() === selectedYear) {
+        if (t.type === "income") income += t.amount;
+        else expense += t.amount;
+      }
+    });
+    return { income, expense };
+  }, [transactions, selectedYear]);
+
+  const formatNumber = (n: number) =>
+    n.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
   return (
     <div className="w-full h-full flex">
       <SideBar />
@@ -164,10 +180,19 @@ export default function StatisticsPage() {
         ) : error ? (
           <div className="text-center p-8 text-red-500">Erreur: {error}</div>
         ) : (
-          <div className="flex justify-center flex-wrap gap-4 p-4">
-            <IncomePieChart data={pieChartData.income} />
-            <ExpensePieChart data={pieChartData.expense} />
-            <TransactionsLineChart data={lineChartData} year={selectedYear} />
+          <div className="flex flex-col items-center w-full">
+            {/* notification d'alerte */}
+            {totalsForYear.income < totalsForYear.expense && (
+              <div className="w-full max-w-6xl p-4 mb-4 bg-red-50 border border-red-200 text-red-800 rounded">
+                <strong>Attention :</strong> Vos dépenses pour {selectedYear} ({formatNumber(totalsForYear.expense)} xof) sont supérieures à vos revenus ({formatNumber(totalsForYear.income)} xof).
+              </div>
+            )}
+
+            <div className="flex justify-center flex-wrap gap-4 p-4 w-full max-w-6xl">
+              <IncomePieChart data={pieChartData.income} />
+              <ExpensePieChart data={pieChartData.expense} />
+              <TransactionsLineChart data={lineChartData} year={selectedYear} />
+            </div>
           </div>
         )}
       </div>

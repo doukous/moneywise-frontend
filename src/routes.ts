@@ -52,6 +52,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
+        loader: dashboardDataLoader,
         Component: Profile,
       },
       {

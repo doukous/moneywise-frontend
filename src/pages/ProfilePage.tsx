@@ -1,10 +1,7 @@
 import React, { useState, useEffect, type FormEvent } from "react";
 import { Edit, Save, X, Upload } from "lucide-react";
-import {
-  getUserProfile,
-  updateUserProfile,
-  type User,
-} from "../services/auth";
+import { updateUserProfile, type User } from "../services/auth";
+import { useLoaderData } from "react-router";
 import SideBar from "../components/SideBar";
 
 const Profile: React.FC = () => {
@@ -21,45 +18,63 @@ const Profile: React.FC = () => {
     profileImage: "",
   });
 
+  // read loader data at top-level of the component
+  const loaderData = useLoaderData();
+
+  const extractProfileImage = (u: unknown): string => {
+    if (!u) return "";
+    const obj = u as Record<string, unknown>;
+    const val = obj["profileImage"] ?? obj["profile_image"] ?? "";
+    return typeof val === "string" ? val : "";
+  };
+
   useEffect(() => {
-    getUserProfile()
-      .then((data) => {
-        setUser(data);
-        setFormData({
-          firstName: data.firstName || "",
-          lastName: data.lastName || "",
-          email: data.email || "",
-          mobileNumber: data.mobileNumber || "",
-          dateOfBirth: data.dateOfBirth || "",
-          password: "",
-          profileImage: data.profileImage || "",
-        });
-      })
-      .catch(() => {
-        const mockUser: User = {
-          id: 1,
-          firstName: "Cheikhouna",
-          lastName: "DIOP",
-          email: "Diop.cheikhunaa@example.com",
-          mobileNumber: "+221 77 000 00 00",
-          dateOfBirth: "2000-01-01",
-          profileImage: "",
-          created_at: "2025-01-01T10:00:00",
-          updated_at: "2025-01-01T10:00:00",
-          name: "",
-        };
-        setUser(mockUser);
-        setFormData({
-          firstName: mockUser.firstName,
-          lastName: mockUser.lastName,
-          email: mockUser.email,
-          mobileNumber: mockUser.mobileNumber,
-          dateOfBirth: mockUser.dateOfBirth,
-          password: "",
-          profileImage: mockUser.profileImage,
-        });
+    const maybeUser = (loaderData as unknown) as User | null;
+    if (maybeUser) {
+      setUser(maybeUser);
+      setFormData({
+        firstName: maybeUser.firstName || "",
+        lastName: maybeUser.lastName || "",
+        email: maybeUser.email || "",
+        mobileNumber: maybeUser.mobileNumber || "",
+        dateOfBirth: maybeUser.dateOfBirth || "",
+        password: "",
+        profileImage: extractProfileImage(loaderData),
       });
-  }, []);
+      return;
+    }
+
+    // fallback mock if no loader provided
+    const mockUser: User = {
+      id: 1,
+      firstName: "Cheikhouna",
+      lastName: "DIOP",
+      email: "Diop.cheikhunaa@example.com",
+      mobileNumber: "+221 77 000 00 00",
+      dateOfBirth: "2000-01-01",
+      profileImage: "",
+      created_at: "2025-01-01T10:00:00",
+      updated_at: "2025-01-01T10:00:00",
+      name: "",
+    };
+    setUser(mockUser);
+    setFormData({
+      firstName: mockUser.firstName,
+      lastName: mockUser.lastName,
+      email: mockUser.email,
+      mobileNumber: mockUser.mobileNumber,
+      dateOfBirth: mockUser.dateOfBirth,
+      password: "",
+      profileImage: mockUser.profileImage,
+    });
+  }, [loaderData]);
+
+  const getUserProfileImage = (u: User | null): string => {
+    if (!u) return "";
+    const asRec = u as unknown as Record<string, unknown>;
+    const val = asRec["profileImage"] ?? asRec["profile_image"] ?? "";
+    return typeof val === "string" ? val : "";
+  };
 
   const handleSubmit = async (e?: FormEvent | React.MouseEvent) => {
     if (e && "preventDefault" in e) e.preventDefault();
@@ -121,19 +136,19 @@ const Profile: React.FC = () => {
             <p className="text-gray-600 mt-1">Gérez vos informations personnelles</p>
           </div>
           <div className="flex items-center gap-3">
-            {user.profileImage ? (
+            { (isEditing ? formData.profileImage : getUserProfileImage(user)) ? (
               <img
-                src={user.profileImage}
+                src={isEditing ? formData.profileImage : getUserProfileImage(user)}
                 alt="Profil"
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                {user.firstName?.[0]}
+                {(user.firstName ?? user?.name ?? "U")[0]}
               </div>
             )}
             <span className="font-medium text-gray-800">
-              {user.firstName} {user.lastName}
+              {isEditing ? `${formData.firstName} ${formData.lastName}` : `${user.firstName ?? user.name ?? ""} ${user.lastName ?? ""}`}
             </span>
           </div>
         </div>
@@ -205,6 +220,7 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, firstName: e.target.value }))
                     }
+                    placeholder="Prénom"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -223,6 +239,7 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, lastName: e.target.value }))
                     }
+                    placeholder="Nom"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -241,6 +258,7 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, dateOfBirth: e.target.value }))
                     }
+                    placeholder="Date de naissance"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -259,6 +277,7 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, mobileNumber: e.target.value }))
                     }
+                    placeholder="Numéro de téléphone"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -277,6 +296,7 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, email: e.target.value }))
                     }
+                    placeholder="Adresse e-mail"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -296,6 +316,7 @@ const Profile: React.FC = () => {
                       onChange={(e) =>
                         setFormData((prev) => ({ ...prev, password: e.target.value }))
                       }
+                      placeholder="Nouveau mot de passe"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -305,6 +326,7 @@ const Profile: React.FC = () => {
                     </label>
                     <input
                       type="password"
+                      placeholder="Confirmer le mot de passe"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
