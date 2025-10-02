@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLoaderData } from "react-router";
 import SideBar from "../components/SideBar";
-import type { TransactionList, User } from "../lib/service/dto";
+import type { TransActionList, User } from "../lib/service/dto";
 
 function capitalizeName(fullname: string): string {
   return fullname
@@ -14,7 +14,7 @@ function capitalizeName(fullname: string): string {
 }
 
 export default function HomePage() {
-  const { user, transactions }: { user: User; transactions: TransactionList } =
+  const { user, transactions }: { user: User; transactions: TransActionList } =
     useLoaderData();
 
   const { monthlyIncome, monthlyExpense } = useMemo(() => {
