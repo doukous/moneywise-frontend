@@ -12,7 +12,3 @@ Repo du Frontend de l'application MoneyWise
 6. jsPdf
 7. Chart JS
 8. xlsx
-
-## Deploiement
-
-Le déploiement s'effectuera sur Vercel, lien à venir
