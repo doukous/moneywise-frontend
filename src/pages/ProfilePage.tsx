@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-base-100 flex flex-col sm:flex-row">
+    <div className="w-full h-screen overflow-y-scroll bg-base-100 flex flex-col sm:flex-row">
       <SideBar />
 
       <div className="flex-1 p-6 flex flex-col items-center">

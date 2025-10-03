@@ -76,9 +76,9 @@ const Reports: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-base-100 flex">
+    <div className="w-full h-screen flex">
       <SideBar />
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-6 space-y-6 h-screen overflow-y-scroll">
         <h1 className="text-2xl font-bold text-base-content">
           Rapports Financiers
         </h1>
