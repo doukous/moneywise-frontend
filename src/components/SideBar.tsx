@@ -11,7 +11,7 @@ import { useRef } from "react";
 
 export default function SideBar() {
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `h-12 rounded-xl flex items-center justify-center md:justify-start gap-x-4 md:px-4 transition-colors duration-200 ${
+    `h-12 rounded-xl flex items-center justify-center md:justify-start gap-x-4 px-4 transition-colors duration-200 ${
       isActive ? "bg-primary text-primary-content" : "hover:bg-base-300"
     }`;
 

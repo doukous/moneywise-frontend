@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
     <div className="w-full h-screen overflow-y-scroll bg-base-100 flex flex-col sm:flex-row">
       <SideBar />
 
-      <div className="flex-1 p-6 flex flex-col items-center">
+      <div className="flex-1 p-6 flex flex-col items-center h-screen overflow-y-scroll">
         <div className="w-full max-w-4xl space-y-6">
           {/* HEADER */}
           <div className="flex justify-between items-center">
