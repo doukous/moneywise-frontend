@@ -1,158 +1,128 @@
 import React, { useState, useEffect, type FormEvent } from "react";
-import { Edit, Save, X, Upload, CheckCircle } from "lucide-react";
-import { updateUserProfile, type User } from "../services/auth"; // fonctions API + type utilisateur
-import { useLoaderData } from "react-router";
+import { Edit, Save, X, Upload, CheckCircle, KeyRound } from "lucide-react";
+import { updateUserProfile, type User } from "../services/auth";
+import { useLoaderData, useNavigate } from "react-router";
 import SideBar from "../components/SideBar";
 
 const Profile: React.FC = () => {
-  // =============================
-  // États principaux du composant
-  // =============================
+  const loaderData = useLoaderData();
+  const navigate = useNavigate();
 
-  // Stocke les infos de l'utilisateur (récupérées via loaderData ou API)
-  const [user, setUser] = useState<User | null>(null);
+  // Initialisation utilisateur
+  const initialUser = loaderData && typeof loaderData === "object" && "user" in loaderData
+    ? (loaderData.user as User)
+    : (loaderData as User | null);
 
-  // Active/désactive le mode édition du profil
+  const [user, setUser] = useState<User | null>(initialUser);
   const [isEditing, setIsEditing] = useState(false);
-
-  // Fichier réel (image uploadée par l’utilisateur)
   const [profileFile, setProfileFile] = useState<File | null>(null);
-
-  // Message de succès affiché après mise à jour
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Formulaire en local (valeurs affichées dans les champs)
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    profileImage: "", // URL de l’image (preview base64 ou lien backend)
+    name: initialUser?.name || "",
+    email: initialUser?.email || "",
+    profileImage: initialUser?.profile_image || "",
   });
 
-  // Données injectées par react-router (via loader)
-  const loaderData = useLoaderData();
-
-  // ===================================================
-  // Fonction utilitaire pour extraire la photo de profil
-  // ===================================================
-  const extractProfileImage = (u: unknown): string => {
-    if (!u) return "";
-    const obj = u as Record<string, unknown>;
-    const val = obj["profileImage"] ?? obj["profile_image"] ?? "";
-    return typeof val === "string" ? val : "";
-  };
-
-  // ==================================================
-  // Charger les données de l’utilisateur dans le state
-  // ==================================================
+  // Mise à jour si le loader change
   useEffect(() => {
-    const maybeUser = loaderData as User | null;
-    if (maybeUser) {
-      setUser(maybeUser);
+    if (initialUser && !user) {
+      setUser(initialUser);
       setFormData({
-        name: maybeUser.name || "",
-        email: maybeUser.email || "",
-        password: "",
-        profileImage: extractProfileImage(loaderData), // soit base64, soit URL
+        name: initialUser.name || "",
+        email: initialUser.email || "",
+        profileImage: initialUser.profile_image || "",
       });
     }
-  }, [loaderData]);
+  }, [loaderData, user, initialUser]);
 
-  // ================================
-  // Gestion de la soumission du form
-  // ================================
+  // Soumission du formulaire
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault(); // Empêche le rechargement de page par défaut
+    e.preventDefault();
+    if (!user) return;
 
     try {
-      // Création d’un FormData → obligatoire pour envoyer fichiers + champs
+      setLoading(true);
       const data = new FormData();
-      if (formData.name) data.append("name", formData.name);
-      if (formData.email) data.append("email", formData.email);
-      if (formData.password) data.append("password", formData.password);
+
+      if (formData.name !== user.name) data.append("name", formData.name);
+      if (formData.email !== user.email) data.append("email", formData.email);
       if (profileFile) data.append("profile_image", profileFile);
 
-      // Requête backend : POST /api/update-profile
+      if (Array.from(data.keys()).length === 0) {
+        setIsEditing(false);
+        setLoading(false);
+        return;
+      }
+
       const updatedUser = await updateUserProfile(data);
-
-      // On met à jour le state local avec la réponse du backend
       setUser(updatedUser);
-      setIsEditing(false); // on sort du mode édition
+      setFormData({
+        name: updatedUser.name || "",
+        email: updatedUser.email || "",
+        profileImage: updatedUser.profile_image || "",
+      });
 
-      // Afficher un message de confirmation temporaire
+      setProfileFile(null);
+      setIsEditing(false);
       setSuccessMessage("Profil mis à jour avec succès !");
-      setTimeout(() => setSuccessMessage(""), 4000); // disparaît après 4s
+      setTimeout(() => setSuccessMessage(""), 4000);
     } catch (err) {
       console.error("Erreur update :", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ===============================
-  // Annuler les modifications locales
-  // ===============================
+  // Annuler l'édition
   const handleCancel = () => {
     if (user) {
-      // On restaure les données originales
       setFormData({
         name: user.name || "",
         email: user.email || "",
-        password: "",
-        profileImage: user.profileImage || "",
+        profileImage: user.profile_image || "",
       });
-      setProfileFile(null); // on supprime le fichier temporaire
+      setProfileFile(null);
     }
-    setIsEditing(false); // retour en mode lecture
+    setIsEditing(false);
   };
 
-  // =====================================
-  // Gestion du changement de photo profil
-  // =====================================
+  // Upload d'image
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setProfileFile(file); // on garde le fichier réel pour upload
-
-      // On lit le fichier localement pour afficher une preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          profileImage: reader.result as string, // preview (base64)
-        }));
-      };
-      reader.readAsDataURL(file);
+      setProfileFile(file);
+      setFormData((prev) => ({
+        ...prev,
+        profileImage: URL.createObjectURL(file),
+      }));
     }
   };
 
-  // ================================
-  // Affichage pendant le chargement
-  // ================================
   if (!user) {
     return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-base-content">
-          Chargement du profil...
-        </h1>
+      <div className="flex w-full h-screen items-center justify-center">
+        <div className="p-6 text-center">
+          <h1 className="text-2xl font-bold text-red-500">
+            Profil non trouvé ou session expirée.
+          </h1>
+          <p className="mt-2 text-gray-600">Veuillez vous connecter.</p>
+        </div>
       </div>
     );
   }
 
-  // ===================
-  // Rendu du composant
-  // ===================
   return (
     <div className="w-full min-h-screen bg-base-100 flex flex-col sm:flex-row">
-      {/* Sidebar de navigation */}
       <SideBar />
 
       <div className="flex-1 p-6 flex flex-col items-center">
         <div className="w-full max-w-4xl space-y-6">
-          {/* HEADER : nom et avatar mini */}
+          {/* HEADER */}
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-base-content">
-                Paramètres
-              </h1>
+              <h1 className="text-2xl font-bold text-base-content">Paramètres</h1>
               <p className="text-sm text-base-content/60">
                 Gérez vos informations personnelles
               </p>
@@ -167,12 +137,10 @@ const Profile: React.FC = () => {
                 />
               ) : (
                 <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
-                  {(user.name ?? "U")[0]}
+                  {user.name?.[0] || "U"}
                 </div>
               )}
-              <span className="font-medium text-base-content">
-                {formData.name}
-              </span>
+              <span className="font-medium text-base-content">{formData.name}</span>
             </div>
           </div>
 
@@ -184,14 +152,13 @@ const Profile: React.FC = () => {
             </div>
           )}
 
-          {/* BLOC PRINCIPAL : Infos personnelles */}
+          {/* FORM */}
           <div className="bg-base-200 rounded-lg shadow p-6 space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold text-base-content">
                 Informations personnelles
               </h2>
 
-              {/* Bouton modifier visible uniquement en mode lecture */}
               {!isEditing && (
                 <button
                   className="btn btn-sm btn-ghost text-primary"
@@ -202,7 +169,7 @@ const Profile: React.FC = () => {
               )}
             </div>
 
-            {/* PHOTO DE PROFIL */}
+            {/* PHOTO */}
             <div className="flex items-center space-x-6">
               {formData.profileImage ? (
                 <img
@@ -212,11 +179,10 @@ const Profile: React.FC = () => {
                 />
               ) : (
                 <div className="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold">
-                  {user.name?.[0]}
+                  {user.name?.[0] || "U"}
                 </div>
               )}
 
-              {/* Input file visible uniquement en mode édition */}
               {isEditing && (
                 <label className="cursor-pointer text-primary flex items-center gap-2 hover:underline">
                   <Upload className="w-4 h-4" />
@@ -225,6 +191,7 @@ const Profile: React.FC = () => {
                     type="file"
                     className="hidden"
                     onChange={handleFileChange}
+                    accept="image/*"
                   />
                 </label>
               )}
@@ -235,10 +202,10 @@ const Profile: React.FC = () => {
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
               onSubmit={handleSubmit}
             >
-              {/* Champ Nom */}
+              {/* Nom */}
               <div>
                 <label className="block text-sm font-medium mb-1 text-base-content">
-                  Nom Complete
+                  Nom Complet
                 </label>
                 {isEditing ? (
                   <input
@@ -246,10 +213,7 @@ const Profile: React.FC = () => {
                     className="input input-bordered w-full"
                     value={formData.name}
                     onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
                     }
                   />
                 ) : (
@@ -257,7 +221,7 @@ const Profile: React.FC = () => {
                 )}
               </div>
 
-              {/* Champ Email */}
+              {/* Email */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium mb-1 text-base-content">
                   Adresse e-mail
@@ -268,10 +232,7 @@ const Profile: React.FC = () => {
                     className="input input-bordered w-full"
                     value={formData.email}
                     onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }))
+                      setFormData((prev) => ({ ...prev, email: e.target.value }))
                     }
                   />
                 ) : (
@@ -279,51 +240,41 @@ const Profile: React.FC = () => {
                 )}
               </div>
 
-              {/* Champ Mot de passe visible uniquement en édition */}
-              {isEditing && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-base-content">
-                      Nouveau mot de passe
-                    </label>
-                    <input
-                      type="password"
-                      className="input input-bordered w-full"
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          password: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
+              {/* Bouton mot de passe oublié */}
+              <div className="md:col-span-2 flex justify-start mt-4">
+                <button
+                  type="button"
+                  onClick={() => navigate("/auth/password_reset")}
+                  className="btn btn-outline btn-warning flex items-center gap-2"
+                >
+                  <KeyRound className="w-4 h-4" />
+                  Mot de passe oublié ?
+                </button>
+              </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-base-content">
-                      Confirmer le mot de passe
-                    </label>
-                    <input
-                      type="password"
-                      className="input input-bordered w-full"
-                      placeholder="Confirmer le mot de passe"
-                    />
-                  </div>
-                </>
-              )}
-
-              {/* BOUTONS : visibles seulement en mode édition */}
+              {/* Boutons d’action */}
               {isEditing && (
                 <div className="md:col-span-2 flex justify-end space-x-2 mt-4">
                   <button
                     type="button"
                     className="btn btn-sm btn-ghost"
                     onClick={handleCancel}
+                    disabled={loading}
                   >
                     <X className="w-4 h-4 mr-1" /> Annuler
                   </button>
-                  <button type="submit" className="btn btn-sm btn-primary">
-                    <Save className="w-4 h-4 mr-1" /> Enregistrer
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      "Enregistrement..."
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-1" /> Enregistrer
+                      </>
+                    )}
                   </button>
                 </div>
               )}
